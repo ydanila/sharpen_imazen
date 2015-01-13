@@ -32,4 +32,4 @@ Example configuration project could be found here https://github.com/ydanila/sha
 
 ###How to use external config
 
-Place file with name <configuration class name>.sharpenconfig.jar in Sharpen directory. Then specify full configuration name via command line parameter or options file and if configuration library and name matches all requirements - it will be loaded.
+Place file with name \<configuration class name\>.sharpenconfig.jar in Sharpen directory. Then specify full configuration name via command line parameter or options file and if configuration library and name matches all requirements - it will be loaded.
