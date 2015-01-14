@@ -29,7 +29,8 @@ import java.io.Writer;
 public class IndentedWriter {
 
 	private final int _maxColumns;
-
+	
+	//Always use crlf for C# output, regardless of platform preference.
 	String _lineSeparator = "\r\n"; //System.getProperty("line.separator");
 
 	String _indentString = "\t";
