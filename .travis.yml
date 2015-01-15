@@ -1,7 +1,8 @@
 language: java
 jdk:
   - oraclejdk7
-before_install: - travis/before_install.sh
+before_install: 
+- travis/before_install.sh
 script: mvn test
 
 notifications:
