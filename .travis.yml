@@ -1,7 +1,8 @@
 language: java
 jdk:
   - oraclejdk7
-before_install: 
+before_install:
+- chmod +x travis/before_install.sh
 - travis/before_install.sh
 script: mvn test
 
