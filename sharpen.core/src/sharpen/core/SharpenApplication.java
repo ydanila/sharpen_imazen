@@ -41,7 +41,6 @@ import sharpen.core.io.IO;
 public class SharpenApplication {
 	private SharpenCommandLine _args;
 	private static final int HELP_SIZE =27;
-	private JavaCore _javaCore;
 
 	public void start(String[] args) throws Exception {
 		try {
@@ -117,7 +116,6 @@ public class SharpenApplication {
 
 		long startTime = System.currentTimeMillis();
 		try {
-			_javaCore = new JavaCore();
 			convert();
 		} finally {
 			System.out.println(
