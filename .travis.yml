@@ -4,7 +4,7 @@ jdk:
 before_install:
 - chmod +x travis/before_install.sh
 - travis/before_install.sh
-script: mvn test
+script: mvn test -q
 
 notifications:
   email:
@@ -21,4 +21,4 @@ deploy:
     all_branches: true
     tags: true
 after_success:
-  - mvn clean install  -Pqulice
+  - mvn clean install -Pqulice -q
