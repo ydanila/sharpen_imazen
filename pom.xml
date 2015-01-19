@@ -154,7 +154,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin> 
+      </plugin>
 
     </plugins>
    
@@ -188,7 +188,7 @@
                     <version>0.12</version>
                     <executions>
                         <execution>
-                            <id>jcabi-check</id>
+                            <id>sharpen-check</id>
                             <phase>verify</phase>
                             <goals>
                                 <goal>check</goal>
