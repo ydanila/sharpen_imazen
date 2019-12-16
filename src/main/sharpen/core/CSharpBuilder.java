@@ -2589,16 +2589,25 @@ public class CSharpBuilder extends ASTVisitor {
 
 	public boolean visit(ArrayCreation node) {
 		ITypeBinding saved = pushExpectedType (node.getType().getElementType().resolveBinding());
-		if (node.dimensions().size() > 1) {
+		final List dimensions = mergeDimensions(node.dimensions(), node.getType().dimensions());
+		if (node.dimensions().size() > 0 && dimensions.size() > 1) {
 			if (null != node.getInitializer()) {
 				notImplemented(node);
 			}
-			pushExpression(unfoldMultiArrayCreation(node));
+			pushExpression(unfoldMultiArrayCreation(node, dimensions));
 		} else {
 			pushExpression(mapSingleArrayCreation(node));
 		}
 		popExpectedType(saved);
 		return false;
+	}
+
+	private List mergeDimensions(List dimensions, List dimensions1) {
+		List result = new ArrayList(dimensions);
+		for(int i = result.size(); i < dimensions1.size(); i++){
+			result.add(dimensions1.get(i));
+		}
+		return result;
 	}
 
 	/**
@@ -2607,12 +2616,13 @@ public class CSharpBuilder extends ASTVisitor {
 	 * string[2], new string[2], new string[2] }, new string[][] { new
 	 * string[2], new string[2], new string[2] } }"
 	 */
-	private CSArrayCreationExpression unfoldMultiArrayCreation(ArrayCreation node) {
-		return unfoldMultiArray(node.getType(), node.dimensions(), 0);
+	private CSArrayCreationExpression unfoldMultiArrayCreation(ArrayCreation node, List dimensions) {
+		return unfoldMultiArray(node.getType(), dimensions, 0);
 	}
 
 	private CSArrayCreationExpression unfoldMultiArray(ArrayType type, List dimensions, int dimensionIndex) {
-		final CSArrayCreationExpression expression = new CSArrayCreationExpression(mappedTypeReference(type));
+		final CSArrayCreationExpression expression = new CSArrayCreationExpression(new CSArrayTypeReference(mappedTypeReference(type.getElementType()),
+				dimensions.size() - dimensionIndex - 1));
 		expression.initializer(new CSArrayInitializerExpression());
 		int length = resolveIntValue(dimensions.get(dimensionIndex));
 		if (dimensionIndex < lastIndex(dimensions) - 1) {
@@ -2621,7 +2631,8 @@ public class CSharpBuilder extends ASTVisitor {
 				        unfoldMultiArray(type, dimensions, dimensionIndex + 1));
 			}
 		} else {
-			Expression innerLength = (Expression) dimensions.get(dimensionIndex + 1);
+			Object dimension = dimensions.get(dimensionIndex + 1);
+			Expression innerLength = dimension instanceof Expression ? (Expression) dimension : null;
 			CSTypeReferenceExpression innerType = mappedTypeReference(type.getElementType());
 			for (int i = 0; i < length; ++i) {
 				expression.initializer().addExpression(
