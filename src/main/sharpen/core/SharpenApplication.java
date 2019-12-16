@@ -91,7 +91,7 @@ public class SharpenApplication {
     			String key= Integer.toString(i);
     			System.out.println();
     			System.out.println(prop.getProperty(key));
-    			if(i%5 ==0){
+    			if(console != null && i%5 ==0){
     			    console.readLine();
     			}
     		} 
