@@ -1014,7 +1014,13 @@ public class CSharpBuilder extends ASTVisitor {
 
 	private void mapThrownExceptions(List thrownExceptions, CSMember member) {
 		for (Object exception : thrownExceptions) {
-			mapThrownException((Name) exception, member);
+			Name name;
+			if(exception instanceof Name){
+				name = (Name) exception;
+			} else {
+				name = ((SimpleType) exception).getName();
+			}
+			mapThrownException(name, member);
 		}
 	}
 
@@ -2602,7 +2608,7 @@ public class CSharpBuilder extends ASTVisitor {
 	 * string[2], new string[2], new string[2] } }"
 	 */
 	private CSArrayCreationExpression unfoldMultiArrayCreation(ArrayCreation node) {
-		return unfoldMultiArray((ArrayType) node.getType().getElementType(), node.dimensions(), 0);
+		return unfoldMultiArray(node.getType(), node.dimensions(), 0);
 	}
 
 	private CSArrayCreationExpression unfoldMultiArray(ArrayType type, List dimensions, int dimensionIndex) {
@@ -2612,7 +2618,7 @@ public class CSharpBuilder extends ASTVisitor {
 		if (dimensionIndex < lastIndex(dimensions) - 1) {
 			for (int i = 0; i < length; ++i) {
 				expression.initializer().addExpression(
-				        unfoldMultiArray((ArrayType) type.getElementType(), dimensions, dimensionIndex + 1));
+				        unfoldMultiArray(type, dimensions, dimensionIndex + 1));
 			}
 		} else {
 			Expression innerLength = (Expression) dimensions.get(dimensionIndex + 1);
