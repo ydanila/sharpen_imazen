@@ -21,13 +21,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core;
 
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
 import sharpen.core.framework.NameUtility;
 
 import java.util.*;
 
 public abstract class Configuration {
 
-    //  default mapping enabled
+	public static final String PLATFORM_VERSION = JavaCore.VERSION_12;
+	public static final int PARSER_LEVEL = AST.JLS12;
+
+	//  default mapping enabled
     private boolean _mapIteratorToEnumerator = true;
     //  default mapping disabled
     private boolean _mapByteToSbyte = false;

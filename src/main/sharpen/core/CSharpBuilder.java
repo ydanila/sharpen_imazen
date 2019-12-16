@@ -1009,7 +1009,7 @@ public class CSharpBuilder extends ASTVisitor {
 			return;
 
 		MethodDeclaration method = (MethodDeclaration) bodyDecl;
-		mapThrownExceptions(method.thrownExceptions(), member);
+		mapThrownExceptions(method.thrownExceptionTypes(), member);
 	}
 
 	private void mapThrownExceptions(List thrownExceptions, CSMember member) {
@@ -2602,7 +2602,7 @@ public class CSharpBuilder extends ASTVisitor {
 	 * string[2], new string[2], new string[2] } }"
 	 */
 	private CSArrayCreationExpression unfoldMultiArrayCreation(ArrayCreation node) {
-		return unfoldMultiArray((ArrayType) node.getType().getComponentType(), node.dimensions(), 0);
+		return unfoldMultiArray((ArrayType) node.getType().getElementType(), node.dimensions(), 0);
 	}
 
 	private CSArrayCreationExpression unfoldMultiArray(ArrayType type, List dimensions, int dimensionIndex) {
@@ -2612,11 +2612,11 @@ public class CSharpBuilder extends ASTVisitor {
 		if (dimensionIndex < lastIndex(dimensions) - 1) {
 			for (int i = 0; i < length; ++i) {
 				expression.initializer().addExpression(
-				        unfoldMultiArray((ArrayType) type.getComponentType(), dimensions, dimensionIndex + 1));
+				        unfoldMultiArray((ArrayType) type.getElementType(), dimensions, dimensionIndex + 1));
 			}
 		} else {
 			Expression innerLength = (Expression) dimensions.get(dimensionIndex + 1);
-			CSTypeReferenceExpression innerType = mappedTypeReference(type.getComponentType());
+			CSTypeReferenceExpression innerType = mappedTypeReference(type.getElementType());
 			for (int i = 0; i < length; ++i) {
 				expression.initializer().addExpression(
 				        new CSArrayCreationExpression(innerType, mapExpression(innerLength)));
@@ -2650,7 +2650,7 @@ public class CSharpBuilder extends ASTVisitor {
 	public boolean visit(ArrayInitializer node) {
 		if (isImplicitelyTypedArrayInitializer(node)) {
 			CSArrayCreationExpression ace = new CSArrayCreationExpression(mappedTypeReference(node.resolveTypeBinding()
-			        .getComponentType()));
+			        .getElementType()));
 			ITypeBinding saved = pushExpectedType(node.resolveTypeBinding().getElementType());
 			ace.initializer(mapArrayInitializer(node));
 			popExpectedType(saved);
@@ -2675,7 +2675,7 @@ public class CSharpBuilder extends ASTVisitor {
 	}
 
 	public ITypeBinding componentType(ArrayType type) {
-		return type.getComponentType().resolveBinding();
+		return type.getElementType().resolveBinding();
 	}
 
 	@Override
