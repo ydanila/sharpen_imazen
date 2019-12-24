@@ -27,18 +27,18 @@ import java.util.List;
 
 public class CSArrayInitializerExpression extends CSExpression {
 
-	private List<CSExpression> _expressions = new ArrayList<CSExpression>();
+    private List<CSExpression> _expressions = new ArrayList<CSExpression>();
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public void addExpression(CSExpression expression) {
-		_expressions.add(expression);
-	}
-	
-	public List<CSExpression> expressions() {
-		return Collections.unmodifiableList(_expressions);
-	}
+    public void addExpression(CSExpression expression) {
+        _expressions.add(expression);
+    }
+
+    public List<CSExpression> expressions() {
+        return Collections.unmodifiableList(_expressions);
+    }
 
 }

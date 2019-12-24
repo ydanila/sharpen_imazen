@@ -28,121 +28,121 @@ import java.io.Writer;
 
 public class IndentedWriter {
 
-	private final int _maxColumns;
-	
-	//Always use crlf for C# output, regardless of platform preference.
-	String _lineSeparator = "\r\n"; //System.getProperty("line.separator");
+    private final int _maxColumns;
 
-	String _indentString = "\t";
+    //Always use crlf for C# output, regardless of platform preference.
+    String _lineSeparator = "\r\n"; //System.getProperty("line.separator");
 
-	int _indentLevel = 0;
+    String _indentString = "\t";
 
-	private int _column;
+    int _indentLevel = 0;
 
-	private Writer _delegate;
+    private int _column;
 
-	private String _prefix;
+    private Writer _delegate;
 
-	public IndentedWriter(Writer writer, int maxColumns) {
-		_delegate = writer;
-		_maxColumns = maxColumns;
-	}
+    private String _prefix;
 
-	public String getIndentString() {
-		return _indentString;
-	}
+    public IndentedWriter(Writer writer, int maxColumns) {
+        _delegate = writer;
+        _maxColumns = maxColumns;
+    }
 
-	public void setIndentString(String indentString) {
-		this._indentString = indentString;
-	}
+    public String getIndentString() {
+        return _indentString;
+    }
 
-	public void indent() {
-		++_indentLevel;
-	}
+    public void setIndentString(String indentString) {
+        this._indentString = indentString;
+    }
 
-	public void outdent() {
-		--_indentLevel;
-	}
+    public void indent() {
+        ++_indentLevel;
+    }
 
-	public void writeIndented(String s) {
-		writeIndentation();
-		write(s);
-	}
+    public void outdent() {
+        --_indentLevel;
+    }
 
-	public void writeIndentedLine(String s) {
-		writeIndentation();
-		writeLine(s);
+    public void writeIndented(String s) {
+        writeIndentation();
+        write(s);
+    }
 
-	}
+    public void writeIndentedLine(String s) {
+        writeIndentation();
+        writeLine(s);
 
-	public void write(String s) {
-		if (_column > _maxColumns) {
-			writeLine();
-			writeIndented(_indentString);
-		}
-		writeBlock(s);
-	}
+    }
 
-	/**
-	 * write a block of text without checking columns.
-	 */
-	public void writeBlock(String s) {
-		uncheckedWrite(s);
-		_column += s.length();
-	}
+    public void write(String s) {
+        if (_column > _maxColumns) {
+            writeLine();
+            writeIndented(_indentString);
+        }
+        writeBlock(s);
+    }
 
-	public void writeLine() {
-		writeLine("");
-	}
+    /**
+     * write a block of text without checking columns.
+     */
+    public void writeBlock(String s) {
+        uncheckedWrite(s);
+        _column += s.length();
+    }
 
-	public void writeLine(String s) {
-		try {
-			_delegate.write(s);
-			_delegate.write(_lineSeparator);
-			_column = 0;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public void writeLine() {
+        writeLine("");
+    }
 
-	private void uncheckedWrite(String s) {
-		try {
-			_delegate.write(s);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public void writeLine(String s) {
+        try {
+            _delegate.write(s);
+            _delegate.write(_lineSeparator);
+            _column = 0;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public void writeIndentation() {
-		for (int i = 0; i < _indentLevel; ++i) {
-			uncheckedWrite(_indentString);
-		}
-		if (null != _prefix) {
-			uncheckedWrite(_prefix);
-		}
-	}
+    private void uncheckedWrite(String s) {
+        try {
+            _delegate.write(s);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public Writer delegate() {
-		return _delegate;
-	}
+    public void writeIndentation() {
+        for (int i = 0; i < _indentLevel; ++i) {
+            uncheckedWrite(_indentString);
+        }
+        if (null != _prefix) {
+            uncheckedWrite(_prefix);
+        }
+    }
 
-	public void writeLines(String lines) {
-		BufferedReader lineReader = new BufferedReader(new StringReader(lines));
-		String line;
-		try {
-			while (null != (line = lineReader.readLine())) {
-				if (line.trim().length() > 0) {
-					writeIndentedLine(line);
-				} else {
-					writeLine();
-				}
-			}
-		} catch (java.io.IOException x) {
-			throw new RuntimeException(x);
-		}
-	}
+    public Writer delegate() {
+        return _delegate;
+    }
 
-	public void linePrefix(String prefix) {
-		_prefix = prefix;
-	}
+    public void writeLines(String lines) {
+        BufferedReader lineReader = new BufferedReader(new StringReader(lines));
+        String line;
+        try {
+            while (null != (line = lineReader.readLine())) {
+                if (line.trim().length() > 0) {
+                    writeIndentedLine(line);
+                } else {
+                    writeLine();
+                }
+            }
+        } catch (java.io.IOException x) {
+            throw new RuntimeException(x);
+        }
+    }
+
+    public void linePrefix(String prefix) {
+        _prefix = prefix;
+    }
 }

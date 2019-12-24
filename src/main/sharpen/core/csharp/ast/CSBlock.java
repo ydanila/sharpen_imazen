@@ -26,47 +26,47 @@ import java.util.Collections;
 import java.util.List;
 
 public class CSBlock extends CSStatement {
-	
-	private List<CSStatement> _statements = new ArrayList<CSStatement>();
-	
-	public boolean isEmpty() {
-		return _statements.isEmpty();
-	}
-	
-	public void addStatement(CSStatement statement) {
-		_statements.add(statement);
-	}
-	
-	public void addStatement(CSExpression expression) {
-		_statements.add(newStatement(expression));
-	}
 
-	private CSExpressionStatement newStatement(CSExpression expression) {
-		return new CSExpressionStatement(CSExpressionStatement.UNKNOWN_START_POSITION, expression);
-	}
-	
-	public void addStatement(int index, CSExpression expression) {
-		_statements.add(index, newStatement(expression));
-	}
-	
-	public void removeStatement (CSStatement cs) {
-		_statements.remove(cs);
-	}
+    private List<CSStatement> _statements = new ArrayList<CSStatement>();
 
-	
-	public List<CSStatement> statements() {
-		return Collections.unmodifiableList(_statements);
-	}
+    public boolean isEmpty() {
+        return _statements.isEmpty();
+    }
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void addStatement(CSStatement statement) {
+        _statements.add(statement);
+    }
 
-	public void addAll(CSBlock body) {
-		_statements.addAll(body._statements);
-	}
+    public void addStatement(CSExpression expression) {
+        _statements.add(newStatement(expression));
+    }
 
-	public void addStatement(int index, CSStatement stmt) {
-		_statements.add(index, stmt);
+    private CSExpressionStatement newStatement(CSExpression expression) {
+        return new CSExpressionStatement(CSExpressionStatement.UNKNOWN_START_POSITION, expression);
+    }
+
+    public void addStatement(int index, CSExpression expression) {
+        _statements.add(index, newStatement(expression));
+    }
+
+    public void removeStatement(CSStatement cs) {
+        _statements.remove(cs);
+    }
+
+
+    public List<CSStatement> statements() {
+        return Collections.unmodifiableList(_statements);
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public void addAll(CSBlock body) {
+        _statements.addAll(body._statements);
+    }
+
+    public void addStatement(int index, CSStatement stmt) {
+        _statements.add(index, stmt);
     }
 }

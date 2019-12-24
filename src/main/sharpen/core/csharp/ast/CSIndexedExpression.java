@@ -21,35 +21,36 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CSIndexedExpression extends CSExpression {
 
-	private final CSExpression _expression;
-	private final List<CSExpression> _indexes = new ArrayList<CSExpression>();
+    private final CSExpression _expression;
+    private final List<CSExpression> _indexes = new ArrayList<CSExpression>();
 
-	public CSIndexedExpression(CSExpression expression, CSExpression index) {
-		_expression = expression;
-		addIndex(index);
-	}
-
-	public CSIndexedExpression(CSExpression expression) {
-		_expression = expression;
+    public CSIndexedExpression(CSExpression expression, CSExpression index) {
+        _expression = expression;
+        addIndex(index);
     }
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
-
-	public CSExpression expression() {
-		return _expression;
-	}
-
-	public void addIndex(CSExpression index) {
-		_indexes.add(index);
+    public CSIndexedExpression(CSExpression expression) {
+        _expression = expression;
     }
 
-	public Iterable<CSExpression> indexes() {
-		return _indexes;
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public CSExpression expression() {
+        return _expression;
+    }
+
+    public void addIndex(CSExpression index) {
+        _indexes.add(index);
+    }
+
+    public Iterable<CSExpression> indexes() {
+        return _indexes;
     }
 }

@@ -22,19 +22,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public class CSCharLiteralExpression extends CSExpression {
-	
-	private String _escapedValue;
 
-	public CSCharLiteralExpression(String escapedValue) {
-		_escapedValue = escapedValue;
-	}
-	
-	public String escapedValue() {
-		return _escapedValue;
-	}
+    private String _escapedValue;
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSCharLiteralExpression(String escapedValue) {
+        _escapedValue = escapedValue;
+    }
+
+    public String escapedValue() {
+        return _escapedValue;
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

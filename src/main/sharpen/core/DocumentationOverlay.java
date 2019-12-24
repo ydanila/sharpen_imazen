@@ -22,9 +22,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core;
 
 public interface DocumentationOverlay {
-	
-	String forType(String fullName);
 
-	String forMember(String fullTypeName, String signature);
+    String forType(String fullName);
+
+    String forMember(String fullTypeName, String signature);
 
 }

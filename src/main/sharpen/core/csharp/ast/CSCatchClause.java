@@ -23,31 +23,31 @@ package sharpen.core.csharp.ast;
 
 public class CSCatchClause extends CSNode {
 
-	private CSVariableDeclaration _exception;
-	private CSBlock _body = new CSBlock();
-	
-	public CSCatchClause() {
-	}
+    private CSVariableDeclaration _exception;
+    private CSBlock _body = new CSBlock();
 
-	public CSCatchClause(CSVariableDeclaration exception) {
-		_exception = exception;
-	}
+    public CSCatchClause() {
+    }
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSCatchClause(CSVariableDeclaration exception) {
+        _exception = exception;
+    }
 
-	public CSBlock body() {
-		return _body ;
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public CSVariableDeclaration exception() {
-		return _exception;
-	}
+    public CSBlock body() {
+        return _body;
+    }
 
-	public void anonymous(boolean an) {
-		if (an && null != _exception) {
-			_exception.name(null);
-		}
-	}
+    public CSVariableDeclaration exception() {
+        return _exception;
+    }
+
+    public void anonymous(boolean an) {
+        if (an && null != _exception) {
+            _exception.name(null);
+        }
+    }
 }

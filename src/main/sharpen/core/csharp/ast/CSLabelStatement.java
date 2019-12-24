@@ -4,20 +4,20 @@ package sharpen.core.csharp.ast;
 
 public class CSLabelStatement extends CSStatement {
 
-	private final String _label;
+    private final String _label;
 
-	public CSLabelStatement(String label) {
-		_label = label;
-	}
+    public CSLabelStatement(String label) {
+        _label = label;
+    }
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
 
-	}
+    }
 
-	public String label() {
-		return _label;
-	}
+    public String label() {
+        return _label;
+    }
 
 }

@@ -26,18 +26,18 @@ package sharpen.core.csharp.ast;
 
 public class CSStruct extends CSTypeDeclaration {
 
-	public CSStruct(String name) {
-		super(name);
-	}
-	
-	@Override
-	public boolean isSealed() {
-		return true;
-	}
+    public CSStruct(String name) {
+        super(name);
+    }
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    @Override
+    public boolean isSealed() {
+        return true;
+    }
+
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

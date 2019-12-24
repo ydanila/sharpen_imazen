@@ -26,29 +26,29 @@ package sharpen.core.csharp.ast;
 
 public class CSBlockComment extends CSComment {
 
-	private final String[] _lines;
+    private final String[] _lines;
 
-	public CSBlockComment(int startPosition, String text) {
-		super(startPosition);
-		_lines = getLines(text);
-	}
+    public CSBlockComment(int startPosition, String text) {
+        super(startPosition);
+        _lines = getLines(text);
+    }
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public String[] lines() {
-		return _lines;
-	}
+    public String[] lines() {
+        return _lines;
+    }
 
-	private String[] getLines(String text) {
-		String[] lines = text.split("\\r?\\n");
+    private String[] getLines(String text) {
+        String[] lines = text.split("\\r?\\n");
 
-		for(int i = 0; i < lines.length; i++){
-			lines[i] = lines[i];
-		}
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = lines[i];
+        }
 
-		return lines;
-	}
+        return lines;
+    }
 }

@@ -21,86 +21,84 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import java.io.IOException;
-
+import org.junit.Test;
 import sharpen.core.SharpenConversionBatch;
 
-import org.junit.Test;
+import java.io.IOException;
 
 
 public class BatchConverterTestCase extends AbstractConversionTestCase {
 
-	@Test
-	public void testSingleClassEmptyPackage() throws Throwable {
-		runBatchConverterTestCase("EmptyClass");
-	}
-	
-  @Test
-	public void testMultipleClassesEmptyPackage() throws Throwable {
-		runBatchConverterTestCase("EmptyClass", "AnotherEmptyClass");
-	}
-	
-	@Test
-	public void testKeywordNamespaces() throws Throwable {
-		runBatchConverterTestCase("namespaceMapping/out/event/Foo");
-	}
-	
-	
-	@Test
-	public void testEventInterfaceAndClassInDifferentCompilationUnits() throws Throwable, IOException, Throwable {
-		runBatchConverterPascalCaseTestCase("events/EventInterface", "events/EventInterfaceImpl");
-	}
-	
-	
+    @Test
+    public void testSingleClassEmptyPackage() throws Throwable {
+        runBatchConverterTestCase("EmptyClass");
+    }
 
-	private void runBatchConverterPascalCaseTestCase(String... resourceNames) throws IOException, Throwable {
-		runBatchConverterTestCase(newPascalCaseIdentifiersConfiguration(), resourceNames);
-	}
-	
-	private void runBatchConverterTestCase(String... resourceNames) throws  IOException, Throwable {
-		runBatchConverterTestCase(getConfiguration(), resourceNames);
-	}
-	
-	
-	@Test
-	public void testSingleClassSimplePackageAndTargetFolder() throws Throwable {
+    @Test
+    public void testMultipleClassesEmptyPackage() throws Throwable {
+        runBatchConverterTestCase("EmptyClass", "AnotherEmptyClass");
+    }
 
-		runResourceTestCaseWithTargetProject("mp/Albatross");
-	}
-	
-	@Test
-	public void testSingleClassNestedPackageAndTargetFolder() throws Throwable {
-		
-		runResourceTestCaseWithTargetProject("mp/nested/Parrot");
-		
-	}
+    @Test
+    public void testKeywordNamespaces() throws Throwable {
+        runBatchConverterTestCase("namespaceMapping/out/event/Foo");
+    }
 
-	private void runResourceTestCaseWithTargetProject(String path)
-			throws Throwable {
 
-		TestCaseResource resource = new TestCaseResource(path);
-		String cu = createCompilationUnit(resource,"TargetProject");
-		
-		String targetProject= projecttempLocation +"/temp/" +
-				"TargetProject/TargetProject.net"; 
+    @Test
+    public void testEventInterfaceAndClassInDifferentCompilationUnits() throws Throwable, IOException, Throwable {
+        runBatchConverterPascalCaseTestCase("events/EventInterface", "events/EventInterfaceImpl");
+    }
 
-		String targetFolder =  projecttempLocation +"/temp/" +
-				"TargetProject/src";
 
-		try {
-			SharpenConversionBatch converter = new SharpenConversionBatch(getConfiguration());
-			converter.setsourceFiles(new String[] {cu});
-			converter.setTargetProject(targetProject);
-			converter.setsourcePathEntries(targetFolder);
-			converter.getConfiguration().setSharpenNamespace("nonamespace");
-			converter.run();
+    private void runBatchConverterPascalCaseTestCase(String... resourceNames) throws IOException, Throwable {
+        runBatchConverterTestCase(newPascalCaseIdentifiersConfiguration(), resourceNames);
+    }
 
-			assertFile(resource, targetProject + "/"+ path + ".cs");
+    private void runBatchConverterTestCase(String... resourceNames) throws IOException, Throwable {
+        runBatchConverterTestCase(getConfiguration(), resourceNames);
+    }
 
-		} finally {
-			tearDown();
-		}
 
-	}
+    @Test
+    public void testSingleClassSimplePackageAndTargetFolder() throws Throwable {
+
+        runResourceTestCaseWithTargetProject("mp/Albatross");
+    }
+
+    @Test
+    public void testSingleClassNestedPackageAndTargetFolder() throws Throwable {
+
+        runResourceTestCaseWithTargetProject("mp/nested/Parrot");
+
+    }
+
+    private void runResourceTestCaseWithTargetProject(String path)
+            throws Throwable {
+
+        TestCaseResource resource = new TestCaseResource(path);
+        String cu = createCompilationUnit(resource, "TargetProject");
+
+        String targetProject = projecttempLocation + "/temp/" +
+                "TargetProject/TargetProject.net";
+
+        String targetFolder = projecttempLocation + "/temp/" +
+                "TargetProject/src";
+
+        try {
+            SharpenConversionBatch converter = new SharpenConversionBatch(getConfiguration());
+            converter.setsourceFiles(new String[]{cu});
+            converter.setTargetProject(targetProject);
+            converter.setsourcePathEntries(targetFolder);
+            converter.getConfiguration().setSharpenNamespace("nonamespace");
+            converter.run();
+
+            assertFile(resource, targetProject + "/" + path + ".cs");
+
+        } finally {
+            tearDown();
+        }
+
+    }
 
 }

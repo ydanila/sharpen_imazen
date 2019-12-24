@@ -5,18 +5,18 @@ package sharpen.core.csharp.ast;
 
 public class CSMacroTypeReference extends CSTypeReferenceExpression {
 
-	private final CSMacro _macro;
+    private final CSMacro _macro;
 
-	public CSMacroTypeReference(CSMacro macro) {
-		_macro = macro;
+    public CSMacroTypeReference(CSMacro macro) {
+        _macro = macro;
     }
 
-	@Override
+    @Override
     public void accept(CSVisitor visitor) {
-		visitor.visit(this);
+        visitor.visit(this);
     }
 
-	public CSNode macro() {
-		return _macro;
+    public CSNode macro() {
+        return _macro;
     }
 }

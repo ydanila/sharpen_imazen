@@ -22,12 +22,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.ui.tests;
 
 public class BindingTestCaseSubject {
-	public interface Foo {
-		void bar();
-	}
-	
-	public static class Baz implements Foo {
-		public void bar() {
-		}
-	}
+    public interface Foo {
+        void bar();
+    }
+
+    public static class Baz implements Foo {
+        public void bar() {
+        }
+    }
 }

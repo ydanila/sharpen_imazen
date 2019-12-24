@@ -23,8 +23,8 @@ package sharpen.core.csharp.ast;
 
 public class CSThisExpression extends CSExpression {
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

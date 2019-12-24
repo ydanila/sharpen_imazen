@@ -2,8 +2,8 @@ package sharpen.core.framework;
 
 public class Types {
 
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public static <T> T cast(Object o) {
-		return (T)o;
-	}
+        return (T) o;
+    }
 }

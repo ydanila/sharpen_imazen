@@ -22,11 +22,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public abstract class CSStatement extends CSNode {
-	
-	public CSStatement() {
-	}
-	
-	public CSStatement(int startPosition) {
-		super(startPosition);
-	}
+
+    public CSStatement() {
+    }
+
+    public CSStatement(int startPosition) {
+        super(startPosition);
+    }
 }

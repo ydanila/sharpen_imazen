@@ -26,23 +26,23 @@ import java.util.List;
 
 public class CSDeclarationExpression extends CSExpression {
 
-	private List<CSVariableDeclaration> _declarations;
+    private List<CSVariableDeclaration> _declarations;
 
-	public CSDeclarationExpression(CSVariableDeclaration declaration) {
-		_declarations = new ArrayList<CSVariableDeclaration>();
+    public CSDeclarationExpression(CSVariableDeclaration declaration) {
+        _declarations = new ArrayList<CSVariableDeclaration>();
         _declarations.add(declaration);
-	}
+    }
 
     public CSDeclarationExpression(List<CSVariableDeclaration> declarations) {
         _declarations = declarations;
     }
-	
-	public List<CSVariableDeclaration> declarations() {
-		return _declarations;
-	}
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public List<CSVariableDeclaration> declarations() {
+        return _declarations;
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

@@ -26,11 +26,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public enum CSMethodModifier {
-	Abstract,
-	AbstractOverride,
-	Sealed,
-	Override,
-	Virtual,
-	Static,
-	None, 
+    Abstract,
+    AbstractOverride,
+    Sealed,
+    Override,
+    Virtual,
+    Static,
+    None,
 }

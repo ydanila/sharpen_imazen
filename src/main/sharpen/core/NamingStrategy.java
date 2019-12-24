@@ -21,59 +21,60 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NamingStrategy {
-	
-	public static final NamingStrategy DEFAULT = new NamingStrategy();
-	
-	static Map<String, String> _identifierMappings = new HashMap<String, String>();
-	
-	static {
-		keywords("as", "base", "bool", "checked", "decimal", 
-				"event", "explicit", "extern", "false", "fixed", 
-				"foreach", "implicit", "in", "internal", "is", 
-				"namespace", "null", "object", "operator", "out", 
-				"override", "params", "readonly", "ref", "sbyte", 
-				"sealed", "sizeof", "stackalloc", "string", "struct", 
-				"true", "typeof", "uint", "ulong", "unchecked", 
-				"unsafe", "ushort", "using", "virtual");
-		mapIdentifier("lock", "Lock");
-		mapIdentifier("delegate", "delegate_");
-	}
-	
-	private static void keywords(String... values) {
-		for (String value : values)
-			keyword(value);
-	}
-	
-	private static void keyword(String value) {
-		mapIdentifier(value, "@" + value);
-	}
-	
-	private static void mapIdentifier(String from, String to) {
-		_identifierMappings.put(from, to);
-	}
-	
-	public String identifier(String name) {
-		String mapped = _identifierMappings.get(name);
-		return mapped != null ? mapped : name;
-	}
 
-	public String methodName(String name) {
-		return namespacePart(name);
-	}
+    public static final NamingStrategy DEFAULT = new NamingStrategy();
 
-	public String namespace(String name) {
-		StringBuilder builder = new StringBuilder();
-		for (String part : name.split("\\.")) {
-			if (builder.length() > 0) builder.append('.');
-			builder.append(namespacePart(part));
-		}
-		return builder.toString();
-	}
+    static Map<String, String> _identifierMappings = new HashMap<String, String>();
 
-	protected String namespacePart(String part) {
-		return identifier(part);
-	}
+    static {
+        keywords("as", "base", "bool", "checked", "decimal",
+                "event", "explicit", "extern", "false", "fixed",
+                "foreach", "implicit", "in", "internal", "is",
+                "namespace", "null", "object", "operator", "out",
+                "override", "params", "readonly", "ref", "sbyte",
+                "sealed", "sizeof", "stackalloc", "string", "struct",
+                "true", "typeof", "uint", "ulong", "unchecked",
+                "unsafe", "ushort", "using", "virtual");
+        mapIdentifier("lock", "Lock");
+        mapIdentifier("delegate", "delegate_");
+    }
+
+    private static void keywords(String... values) {
+        for (String value : values)
+            keyword(value);
+    }
+
+    private static void keyword(String value) {
+        mapIdentifier(value, "@" + value);
+    }
+
+    private static void mapIdentifier(String from, String to) {
+        _identifierMappings.put(from, to);
+    }
+
+    public String identifier(String name) {
+        String mapped = _identifierMappings.get(name);
+        return mapped != null ? mapped : name;
+    }
+
+    public String methodName(String name) {
+        return namespacePart(name);
+    }
+
+    public String namespace(String name) {
+        StringBuilder builder = new StringBuilder();
+        for (String part : name.split("\\.")) {
+            if (builder.length() > 0) builder.append('.');
+            builder.append(namespacePart(part));
+        }
+        return builder.toString();
+    }
+
+    protected String namespacePart(String part) {
+        return identifier(part);
+    }
 }

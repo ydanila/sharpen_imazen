@@ -23,59 +23,59 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.List;
 
 public class CSTypeReference extends CSTypeReferenceExpression implements CSTypeArgumentProvider {
 
-	private final String _typeName;
-	private final CSTypeArgumentSupport _typeArguments = new CSTypeArgumentSupport();
-	
-	public CSTypeReference(String typeName) {
-		_typeName = typeName;
-	}
+    private final String _typeName;
+    private final CSTypeArgumentSupport _typeArguments = new CSTypeArgumentSupport();
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
-	
-	public String typeName() {
-		return _typeName;
-	}
-	
-	@Override
-	public String toString() {
-		return _typeName;
-	}
-	
-	public List<CSTypeReferenceExpression> typeArguments() {
-		return _typeArguments.typeArguments();		
-	}
+    public CSTypeReference(String typeName) {
+        _typeName = typeName;
+    }
 
-	public void addTypeArgument(CSTypeReferenceExpression typeArgument) {
-		
-		_typeArguments.addTypeArgument(typeArgument);		
-	}
-	
-	@Override
-	public int hashCode() {
-		return _typeName.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		if( o instanceof CSTypeReference ) {
-			CSTypeReference other = (CSTypeReference) o;
-			boolean retval = other._typeName.equals(this._typeName);
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-			List<CSTypeReferenceExpression> typeArgs = other.typeArguments();
-			List<CSTypeReferenceExpression> myTypeArgs = this.typeArguments();
-			retval = retval && typeArgs.equals(myTypeArgs);
+    public String typeName() {
+        return _typeName;
+    }
 
-			return retval;
-		} else {
-			return false;
-		}
-	}		
+    @Override
+    public String toString() {
+        return _typeName;
+    }
+
+    public List<CSTypeReferenceExpression> typeArguments() {
+        return _typeArguments.typeArguments();
+    }
+
+    public void addTypeArgument(CSTypeReferenceExpression typeArgument) {
+
+        _typeArguments.addTypeArgument(typeArgument);
+    }
+
+    @Override
+    public int hashCode() {
+        return _typeName.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof CSTypeReference) {
+            CSTypeReference other = (CSTypeReference) o;
+            boolean retval = other._typeName.equals(this._typeName);
+
+            List<CSTypeReferenceExpression> typeArgs = other.typeArguments();
+            List<CSTypeReferenceExpression> myTypeArgs = this.typeArguments();
+            retval = retval && typeArgs.equals(myTypeArgs);
+
+            return retval;
+        } else {
+            return false;
+        }
+    }
 
 }

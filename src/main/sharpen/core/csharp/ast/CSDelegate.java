@@ -21,27 +21,29 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CSDelegate extends CSType {
-	
-	private List<CSVariableDeclaration> _parameters = new ArrayList<CSVariableDeclaration>();
 
-	public CSDelegate(String name) {
-		super(name);
-	}
-	
-	public void addParameter(String name, CSTypeReference type) {
-		_parameters.add(new CSVariableDeclaration(name, type));
-	}
+    private List<CSVariableDeclaration> _parameters = new ArrayList<CSVariableDeclaration>();
 
-	public List<CSVariableDeclaration> parameters() {
-		return Collections.unmodifiableList(_parameters);
-	}
+    public CSDelegate(String name) {
+        super(name);
+    }
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void addParameter(String name, CSTypeReference type) {
+        _parameters.add(new CSVariableDeclaration(name, type));
+    }
+
+    public List<CSVariableDeclaration> parameters() {
+        return Collections.unmodifiableList(_parameters);
+    }
+
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

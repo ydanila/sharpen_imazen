@@ -28,10 +28,10 @@ package sharpen.core.framework;
  */
 public class NameUtility {
 
-	public static String unqualify(String qualifiedMethodName) {
-		final int lastDot = qualifiedMethodName.lastIndexOf('.');
-		return lastDot == -1
-				? qualifiedMethodName
-				: qualifiedMethodName.substring(lastDot+1);
-	}
+    public static String unqualify(String qualifiedMethodName) {
+        final int lastDot = qualifiedMethodName.lastIndexOf('.');
+        return lastDot == -1
+                ? qualifiedMethodName
+                : qualifiedMethodName.substring(lastDot + 1);
+    }
 }

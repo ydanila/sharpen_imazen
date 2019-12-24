@@ -23,31 +23,32 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import sharpen.core.*;
 import org.junit.Test;
+import sharpen.core.Configuration;
+import sharpen.core.PascalCaseNamingStrategy;
 
 /**
  * @exclude
  */
 public class NamespaceMappingTestCase extends AbstractConversionTestCase {
-	
-	@Test
-	public void testPascalCaseNamespaces() throws Throwable {
-		runBatchConverterTestCase(
-				newPascalCaseConfiguration(),
-				"namespaceMapping/foo/bar/Baz",
-				"namespaceMapping/foo/bar/Gazonk");
-	}
-	
-	@Test
-	public void testKeywordsInNamespace() throws Throwable {
-		runResourceTestCase("namespaceMapping/out/event/Foo");
-	}
-	
-	private Configuration newPascalCaseConfiguration() {
-		final Configuration configuration = super.getConfiguration();
-		configuration.setNamingStrategy(PascalCaseNamingStrategy.DEFAULT);
-		return configuration;
-	}
+
+    @Test
+    public void testPascalCaseNamespaces() throws Throwable {
+        runBatchConverterTestCase(
+                newPascalCaseConfiguration(),
+                "namespaceMapping/foo/bar/Baz",
+                "namespaceMapping/foo/bar/Gazonk");
+    }
+
+    @Test
+    public void testKeywordsInNamespace() throws Throwable {
+        runResourceTestCase("namespaceMapping/out/event/Foo");
+    }
+
+    private Configuration newPascalCaseConfiguration() {
+        final Configuration configuration = super.getConfiguration();
+        configuration.setNamingStrategy(PascalCaseNamingStrategy.DEFAULT);
+        return configuration;
+    }
 
 }

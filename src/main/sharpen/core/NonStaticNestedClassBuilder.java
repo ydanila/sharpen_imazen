@@ -23,64 +23,64 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core;
 
-import java.util.List;
-
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import sharpen.core.csharp.ast.*;
 
-import org.eclipse.jdt.core.dom.*;
+import java.util.List;
 
 /**
  * @exclude
  */
 public class NonStaticNestedClassBuilder extends AbstractNestedClassBuilder {
 
-	private TypeDeclaration _nestedType;
-	private CSTypeDeclaration _convertedType;
-	private CSField _enclosingField;
+    private TypeDeclaration _nestedType;
+    private CSTypeDeclaration _convertedType;
+    private CSField _enclosingField;
 
-	public NonStaticNestedClassBuilder(CSharpBuilder other, TypeDeclaration nestedType) {
-		super(other);
-		_nestedType = nestedType;
-		
-		_convertedType = processTypeDeclaration(_nestedType);
-		_enclosingField = createEnclosingField();
-		patchConstructors();		
-		_convertedType.addMember(_enclosingField);
-	}
+    public NonStaticNestedClassBuilder(CSharpBuilder other, TypeDeclaration nestedType) {
+        super(other);
+        _nestedType = nestedType;
 
-	private void patchConstructors() {
-		final List<CSConstructor> ctors = _convertedType.constructors();
-		if (ctors.isEmpty()) {
-			introduceConstructor();
-		} else {
-			for (CSConstructor ctor : ctors) {
-				patchConstructor(ctor);
-			}
-		}
-	}
+        _convertedType = processTypeDeclaration(_nestedType);
+        _enclosingField = createEnclosingField();
+        patchConstructors();
+        _convertedType.addMember(_enclosingField);
+    }
 
-	private void patchConstructor(CSConstructor ctor) {
-		ctor.addParameter(0, new CSVariableDeclaration(_enclosingField.name(), _enclosingField.type()));
-		ctor.body().addStatement(0, createFieldAssignment(_enclosingField.name(), _enclosingField.name()));
-		
-		ITypeBinding superClass = nestedTypeBinding().getSuperclass();
-		if (superClass != null && isNonStaticNestedType (superClass)) {
-			CSConstructorInvocationExpression cie = new CSConstructorInvocationExpression(new CSBaseExpression());
-			cie.addArgument(new CSReferenceExpression (_enclosingField.name()));
-			ctor.chainedConstructorInvocation(cie);
-		}
-	}
+    private void patchConstructors() {
+        final List<CSConstructor> ctors = _convertedType.constructors();
+        if (ctors.isEmpty()) {
+            introduceConstructor();
+        } else {
+            for (CSConstructor ctor : ctors) {
+                patchConstructor(ctor);
+            }
+        }
+    }
 
-	private void introduceConstructor() {
-		final CSConstructor ctor = new CSConstructor();
-		ctor.visibility(CSVisibility.Internal);
-		patchConstructor(ctor);
-		_convertedType.addMember(ctor);
-	}
+    private void patchConstructor(CSConstructor ctor) {
+        ctor.addParameter(0, new CSVariableDeclaration(_enclosingField.name(), _enclosingField.type()));
+        ctor.body().addStatement(0, createFieldAssignment(_enclosingField.name(), _enclosingField.name()));
 
-	@Override
-	protected ITypeBinding nestedTypeBinding() {
-		return _nestedType.resolveBinding();
-	}
+        ITypeBinding superClass = nestedTypeBinding().getSuperclass();
+        if (superClass != null && isNonStaticNestedType(superClass)) {
+            CSConstructorInvocationExpression cie = new CSConstructorInvocationExpression(new CSBaseExpression());
+            cie.addArgument(new CSReferenceExpression(_enclosingField.name()));
+            ctor.chainedConstructorInvocation(cie);
+        }
+    }
+
+    private void introduceConstructor() {
+        final CSConstructor ctor = new CSConstructor();
+        ctor.visibility(CSVisibility.Internal);
+        patchConstructor(ctor);
+        _convertedType.addMember(ctor);
+    }
+
+    @Override
+    protected ITypeBinding nestedTypeBinding() {
+        return _nestedType.resolveBinding();
+    }
 
 }

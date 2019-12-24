@@ -20,14 +20,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. */
 
 package sharpen.core.framework;
-import org.eclipse.jdt.core.dom.*;
+
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class CompilationUnitPair {
-	public CompilationUnitPair(String source, CompilationUnit ast) {
-		this.source = source;
-		this.ast = ast;
-	}
-	
-	public final String source;
-	public final CompilationUnit ast;
+    public CompilationUnitPair(String source, CompilationUnit ast) {
+        this.source = source;
+        this.ast = ast;
+    }
+
+    public final String source;
+    public final CompilationUnit ast;
 }

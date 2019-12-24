@@ -21,24 +21,25 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.framework;
 
-import java.util.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.IBinding;
 
-import org.eclipse.jdt.core.dom.*;
+import java.util.List;
 
 public class DefaultASTResolver implements ASTResolver {
-	
-	private final List<CompilationUnitPair> _pairs;
-	
-	public DefaultASTResolver(List<CompilationUnitPair> pairs) {
-		_pairs = pairs;
-	}
 
-	public ASTNode findDeclaringNode(IBinding binding) {
-		for (CompilationUnitPair pair : _pairs) {
-			ASTNode node = pair.ast.findDeclaringNode(binding);
-			if (null != node) return node;
-		}
-		
-		return null;
-	}
+    private final List<CompilationUnitPair> _pairs;
+
+    public DefaultASTResolver(List<CompilationUnitPair> pairs) {
+        _pairs = pairs;
+    }
+
+    public ASTNode findDeclaringNode(IBinding binding) {
+        for (CompilationUnitPair pair : _pairs) {
+            ASTNode node = pair.ast.findDeclaringNode(binding);
+            if (null != node) return node;
+        }
+
+        return null;
+    }
 }

@@ -21,8 +21,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.framework;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.IBinding;
 
 public interface ASTResolver {
-	ASTNode findDeclaringNode(IBinding binding);
+    ASTNode findDeclaringNode(IBinding binding);
 }

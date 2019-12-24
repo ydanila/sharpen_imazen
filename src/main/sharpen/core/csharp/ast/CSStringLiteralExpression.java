@@ -23,17 +23,17 @@ package sharpen.core.csharp.ast;
 
 public class CSStringLiteralExpression extends CSExpression {
 
-	private String _escapedValue;
+    private String _escapedValue;
 
-	public CSStringLiteralExpression(String escapedValue) {
-		_escapedValue = escapedValue;
-	}
-	
-	public String escapedValue() {
-		return _escapedValue;
-	}
+    public CSStringLiteralExpression(String escapedValue) {
+        _escapedValue = escapedValue;
+    }
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public String escapedValue() {
+        return _escapedValue;
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 }

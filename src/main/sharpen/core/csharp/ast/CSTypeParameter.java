@@ -26,28 +26,28 @@ package sharpen.core.csharp.ast;
 
 public class CSTypeParameter extends CSNode {
 
-	private final String _name;
-	private CSTypeReferenceExpression _type;
+    private final String _name;
+    private CSTypeReferenceExpression _type;
 
-	public CSTypeParameter(String name) {
-		_name = name;
-	}
+    public CSTypeParameter(String name) {
+        _name = name;
+    }
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public String name() {
-		return _name;
-	}
+    public String name() {
+        return _name;
+    }
 
-	
-	public CSTypeReferenceExpression superClass() {
-		return _type;
-	}
-	
-	public void superClass(CSTypeReferenceExpression type) {
-		_type = type;
-	}
+
+    public CSTypeReferenceExpression superClass() {
+        return _type;
+    }
+
+    public void superClass(CSTypeReferenceExpression type) {
+        _type = type;
+    }
 }

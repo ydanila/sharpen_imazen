@@ -4,6 +4,6 @@ package sharpen.core.framework;
 
 public interface Environment {
 
-	<T> T provide(Class<T> service);
+    <T> T provide(Class<T> service);
 
 }

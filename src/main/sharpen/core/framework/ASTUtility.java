@@ -24,63 +24,64 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.framework;
 
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.compiler.*;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.compiler.IProblem;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 /**
  * @exclude
  */
 public class ASTUtility {
-	
-	public static String sourceInformation(ASTNode node) {
-		
-		final CompilationUnit compilationUnit = compilationUnitFor(node);
-		return sourceInformation(compilationUnit, node);
-	}
 
-	public static String sourceInformation(final CompilationUnit compilationUnit, ASTNode node) {
-		return compilationUnitPath(compilationUnit) + ":" + lineNumber(compilationUnit, node);
-	}
+    public static String sourceInformation(ASTNode node) {
 
-	private static CompilationUnit compilationUnitFor(ASTNode node) {
-		return ancestorOf(node, CompilationUnit.class);
-	}
+        final CompilationUnit compilationUnit = compilationUnitFor(node);
+        return sourceInformation(compilationUnit, node);
+    }
 
-	public static <T extends ASTNode> T ancestorOf(ASTNode node, Class<T> ancestorType) {
-		ASTNode parent = node.getParent();
-		do {
-			if (ancestorType.isInstance(parent))
-				return (T) parent;
-			parent = parent.getParent();
-		} while (parent != null);
-		
-		throw new IllegalArgumentException(node + " has no ancestor of type " + ancestorType.getName());
-	}
+    public static String sourceInformation(final CompilationUnit compilationUnit, ASTNode node) {
+        return compilationUnitPath(compilationUnit) + ":" + lineNumber(compilationUnit, node);
+    }
 
-	public static String compilationUnitPath(CompilationUnit ast) {
-		IJavaElement element = ast.getJavaElement();
-		if (null == element) return "<unknown>";
-		return element.getResource().getFullPath().toPortableString();
-	}
+    private static CompilationUnit compilationUnitFor(ASTNode node) {
+        return ancestorOf(node, CompilationUnit.class);
+    }
 
-	@SuppressWarnings("deprecation")
-	public static int lineNumber(CompilationUnit ast, ASTNode node) {
-		return ast.lineNumber(node.getStartPosition());
-	}
+    public static <T extends ASTNode> T ancestorOf(ASTNode node, Class<T> ancestorType) {
+        ASTNode parent = node.getParent();
+        do {
+            if (ancestorType.isInstance(parent))
+                return (T) parent;
+            parent = parent.getParent();
+        } while (parent != null);
 
-	private static void dumpProblem(IProblem problem) {
-		System.err.print(problem.getOriginatingFileName());
-		System.err.println("(" + problem.getSourceLineNumber() + "): " + problem.getMessage());
-	}
+        throw new IllegalArgumentException(node + " has no ancestor of type " + ancestorType.getName());
+    }
 
-	public static boolean dumpProblemsToStdErr(CompilationUnit ast) {
-		boolean hasErrors = false;
-		for (IProblem problem : ast.getProblems()) {
-			if (problem.isError()) {
-				dumpProblem(problem);
-				hasErrors = true;
-			}
-		}
-		return hasErrors;
-	}
+    public static String compilationUnitPath(CompilationUnit ast) {
+        IJavaElement element = ast.getJavaElement();
+        if (null == element) return "<unknown>";
+        return element.getResource().getFullPath().toPortableString();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static int lineNumber(CompilationUnit ast, ASTNode node) {
+        return ast.lineNumber(node.getStartPosition());
+    }
+
+    private static void dumpProblem(IProblem problem) {
+        System.err.print(problem.getOriginatingFileName());
+        System.err.println("(" + problem.getSourceLineNumber() + "): " + problem.getMessage());
+    }
+
+    public static boolean dumpProblemsToStdErr(CompilationUnit ast) {
+        boolean hasErrors = false;
+        for (IProblem problem : ast.getProblems()) {
+            if (problem.isError()) {
+                dumpProblem(problem);
+                hasErrors = true;
+            }
+        }
+        return hasErrors;
+    }
 }

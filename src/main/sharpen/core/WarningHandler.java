@@ -20,14 +20,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. */
 
 /**
- * 
+ *
  */
 package sharpen.core;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
 public class WarningHandler {
-	public void warning(ASTNode node, String message) {
-		System.err.println("WARNING: " + message);
-	}
+    public void warning(ASTNode node, String message) {
+        System.err.println("WARNING: " + message);
+    }
 }

@@ -21,49 +21,51 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class CSNode {
-	
-	public static final int UNKNOWN_START_POSITION = Integer.MIN_VALUE;
 
-	private int _startPosition;
+    public static final int UNKNOWN_START_POSITION = Integer.MIN_VALUE;
 
-	private Set<String> _enclosingIfDefs = new HashSet<String>();
-	
-	private CSNode _parent;
-	
-	public CSNode() {
-		this(UNKNOWN_START_POSITION);
-	}
-	
-	public CSNode(int startPosition) {
-		_startPosition = startPosition;
-	}
-	
-	public int startPosition() {
-		return _startPosition;
-	}
-	
-	public void startPosition(int value) {
-		_startPosition = value;
-	}
+    private int _startPosition;
 
-	public abstract void accept(CSVisitor visitor);
+    private Set<String> _enclosingIfDefs = new HashSet<String>();
 
-	public void addEnclosingIfDef(String expression) {
-		_enclosingIfDefs.add(expression);
-	}
+    private CSNode _parent;
 
-	public Set<String> enclosingIfDefs() {
-		return Collections.unmodifiableSet(_enclosingIfDefs);
-	}
-	
-	public CSNode parent () {
-		return _parent;
-	}
-	
-	public void parent (CSNode node) {
-		_parent = node;
-	}
+    public CSNode() {
+        this(UNKNOWN_START_POSITION);
+    }
+
+    public CSNode(int startPosition) {
+        _startPosition = startPosition;
+    }
+
+    public int startPosition() {
+        return _startPosition;
+    }
+
+    public void startPosition(int value) {
+        _startPosition = value;
+    }
+
+    public abstract void accept(CSVisitor visitor);
+
+    public void addEnclosingIfDef(String expression) {
+        _enclosingIfDefs.add(expression);
+    }
+
+    public Set<String> enclosingIfDefs() {
+        return Collections.unmodifiableSet(_enclosingIfDefs);
+    }
+
+    public CSNode parent() {
+        return _parent;
+    }
+
+    public void parent(CSNode node) {
+        _parent = node;
+    }
 }

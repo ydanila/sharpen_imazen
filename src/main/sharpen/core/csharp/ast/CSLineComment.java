@@ -26,20 +26,20 @@ package sharpen.core.csharp.ast;
 
 public class CSLineComment extends CSComment {
 
-	private final String _text;
+    private final String _text;
 
-	public CSLineComment(int startPosition, String text) {
-		super(startPosition);
-		_text = text;
-	}
+    public CSLineComment(int startPosition, String text) {
+        super(startPosition);
+        _text = text;
+    }
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public String text() {
-		return _text;
-	}
+    public String text() {
+        return _text;
+    }
 
 }

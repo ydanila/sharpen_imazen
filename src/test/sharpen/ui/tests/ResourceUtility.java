@@ -23,30 +23,31 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import java.io.*;
-import java.net.*;
+import sharpen.util.ResourceLoader;
 
-import sharpen.util.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 
 public class ResourceUtility {
-	
-	public static String getStringContents(String resourceName) throws IOException {
-		return getStringContents(resourceName, ResourceUtility.class);
-	}
 
-	public static String getStringContents(String resourceName, Class<?> relativeTo) throws IOException {
-		return ResourceLoader.getStringContents(relativeTo, "/" + resourceName);
-	}	
+    public static String getStringContents(String resourceName) throws IOException {
+        return getStringContents(resourceName, ResourceUtility.class);
+    }
 
-	public static String getResourceUri(String resourceName) {
-		final URL url = ResourceUtility.class.getResource("/" + resourceName);
-		if (null == url) ResourceLoader.resourceNotFound(resourceName);
-		try {
-			return url.toURI().toString();
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public static String getStringContents(String resourceName, Class<?> relativeTo) throws IOException {
+        return ResourceLoader.getStringContents(relativeTo, "/" + resourceName);
+    }
+
+    public static String getResourceUri(String resourceName) {
+        final URL url = ResourceUtility.class.getResource("/" + resourceName);
+        if (null == url) ResourceLoader.resourceNotFound(resourceName);
+        try {
+            return url.toURI().toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

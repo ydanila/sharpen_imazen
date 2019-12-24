@@ -26,5 +26,5 @@ package sharpen.core.csharp.ast;
 
 public interface CSParameterized {
 
-	void addParameter(CSVariableDeclaration parameter);
+    void addParameter(CSVariableDeclaration parameter);
 }

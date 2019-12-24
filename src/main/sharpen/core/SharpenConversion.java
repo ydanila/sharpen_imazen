@@ -21,138 +21,146 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IBinding;
+import sharpen.core.csharp.CSharpPrinter;
+import sharpen.core.csharp.ast.CSCompilationUnit;
+import sharpen.core.framework.ASTResolver;
+import sharpen.core.framework.ASTUtility;
+import sharpen.core.framework.Environment;
+import sharpen.core.framework.Environments;
+import sharpen.core.io.IO;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import sharpen.core.csharp.CSharpPrinter;
-import sharpen.core.csharp.ast.CSCompilationUnit;
-import sharpen.core.framework.*;
-import org.eclipse.jdt.core.dom.*;
-import sharpen.core.io.IO;
 
 public class SharpenConversion {
 
-	private CSharpPrinter _printer;
-	protected String _source;
-	protected Writer _writer;
-	protected final Configuration _configuration;
-	private ASTResolver _resolver = new ASTResolver() {
-		public ASTNode findDeclaringNode(IBinding binding) {
-			return null;
-		}
-	};
+    private CSharpPrinter _printer;
+    protected String _source;
+    protected Writer _writer;
+    protected final Configuration _configuration;
+    private ASTResolver _resolver = new ASTResolver() {
+        public ASTNode findDeclaringNode(IBinding binding) {
+            return null;
+        }
+    };
 
-	public SharpenConversion(Configuration configuration) {
-		_configuration = configuration;
-	}
+    public SharpenConversion(Configuration configuration) {
+        _configuration = configuration;
+    }
 
-	public void setSource(String source) {
-		_source = source;
-	}
+    public void setSource(String source) {
+        _source = source;
+    }
 
-	public void setTargetWriter(Writer writer) {
-		_writer = writer;
-	}
+    public void setTargetWriter(Writer writer) {
+        _writer = writer;
+    }
 
-	public Writer getTargetWriter() {
-		return _writer;
-	}
+    public Writer getTargetWriter() {
+        return _writer;
+    }
 
-	public void setPrinter(CSharpPrinter printer) {
-		_printer = printer;
-	}
+    public void setPrinter(CSharpPrinter printer) {
+        _printer = printer;
+    }
 
-	private CSharpPrinter getPrinter() {
-		if (null == _printer) {
-			_printer = new CSharpPrinter();
-		}
-		return _printer;
-	}
+    private CSharpPrinter getPrinter() {
+        if (null == _printer) {
+            _printer = new CSharpPrinter();
+        }
+        return _printer;
+    }
 
-	public Configuration getConfiguration() {
-		return _configuration;
-	}
+    public Configuration getConfiguration() {
+        return _configuration;
+    }
 
-	protected void print(CSCompilationUnit unit) {
-		printHeader();
-		printTree(unit);
-	}
+    protected void print(CSCompilationUnit unit) {
+        printHeader();
+        printTree(unit);
+    }
 
-	private void printHeader() {
-		try {
-			_writer.write(_configuration.header().replace("\n", "\r\n"));
-		} catch (IOException x) {
-			throw new RuntimeException(x);
-		}
-	}
+    private void printHeader() {
+        try {
+            _writer.write(_configuration.header().replace("\n", "\r\n"));
+        } catch (IOException x) {
+            throw new RuntimeException(x);
+        }
+    }
 
-	private void printTree(CSCompilationUnit unit) {
-		CSharpPrinter printer = getPrinter();
-		printer.setWriter(_writer, _configuration.getIndentString(), _configuration.getMaxColumns());
-		printer.print(unit);
-	}
+    private void printTree(CSCompilationUnit unit) {
+        CSharpPrinter printer = getPrinter();
+        printer.setWriter(_writer, _configuration.getIndentString(), _configuration.getMaxColumns());
+        printer.print(unit);
+    }
 
-	protected CSCompilationUnit run(final CompilationUnit ast) {
-		processProblems(ast);
-		prepareForConversion(ast);		
-		CSCompilationUnit cs = convert(ast);
-		if (!cs.ignore() && !cs.types().isEmpty()) {
-			print(cs);
-		}
-		return cs;
-	}
+    protected CSCompilationUnit run(final CompilationUnit ast) {
+        processProblems(ast);
+        prepareForConversion(ast);
+        CSCompilationUnit cs = convert(ast);
+        if (!cs.ignore() && !cs.types().isEmpty()) {
+            print(cs);
+        }
+        return cs;
+    }
 
-	protected void processProblems(CompilationUnit ast) {
-		if (ASTUtility.dumpProblemsToStdErr(ast) && !ignoringErrors()) {
-			throw new RuntimeException("'" + _source + "' has errors, check stderr for details.");
-		}
-	}
+    protected void processProblems(CompilationUnit ast) {
+        if (ASTUtility.dumpProblemsToStdErr(ast) && !ignoringErrors()) {
+            throw new RuntimeException("'" + _source + "' has errors, check stderr for details.");
+        }
+    }
 
-	private CSCompilationUnit convert(final CompilationUnit ast) {
-		final CSCompilationUnit compilationUnit = new CSCompilationUnit();
-		final Environment environment = Environments.newConventionBasedEnvironment(ast, _configuration, _resolver, compilationUnit);
-		Environments.runWith(environment, new Runnable() { public void run() {
-			CSharpBuilder builder = new CSharpBuilder();
-			String source = readFile(SharpenConversion.this._source);
-			builder.setSourceContent(source);
-			builder.run();
-		}});
-		
-		return compilationUnit;
-	}
+    private CSCompilationUnit convert(final CompilationUnit ast) {
+        final CSCompilationUnit compilationUnit = new CSCompilationUnit();
+        final Environment environment = Environments.newConventionBasedEnvironment(ast, _configuration, _resolver, compilationUnit);
+        Environments.runWith(environment, new Runnable() {
+            public void run() {
+                CSharpBuilder builder = new CSharpBuilder();
+                String source = readFile(SharpenConversion.this._source);
+                builder.setSourceContent(source);
+                builder.run();
+            }
+        });
 
-	private String readFile(String sourcePath) {
-		try {
-			return IO.readFile(new File(sourcePath));
-		} catch (IOException e) {
-			System.err.println("Can't load source from file " + sourcePath);
-			return "";
-		}
-	}
+        return compilationUnit;
+    }
 
-	private boolean ignoringErrors() {
-		return _configuration.getIgnoreErrors();
-	}
+    private String readFile(String sourcePath) {
+        try {
+            return IO.readFile(new File(sourcePath));
+        } catch (IOException e) {
+            System.err.println("Can't load source from file " + sourcePath);
+            return "";
+        }
+    }
 
-	private void prepareForConversion(final CompilationUnit ast) {
-		WarningHandler warningHandler = new WarningHandler() {
-			public void warning(ASTNode node, String message) {
-				System.err.println(getSourcePath() + "(" + ASTUtility.lineNumber(ast, node) + "): " + message);
-			}
-		};
-		_configuration.setWarningHandler(warningHandler);
-	}
+    private boolean ignoringErrors() {
+        return _configuration.getIgnoreErrors();
+    }
 
-	private String getSourcePath() {
+    private void prepareForConversion(final CompilationUnit ast) {
+        WarningHandler warningHandler = new WarningHandler() {
+            public void warning(ASTNode node, String message) {
+                System.err.println(getSourcePath() + "(" + ASTUtility.lineNumber(ast, node) + "): " + message);
+            }
+        };
+        _configuration.setWarningHandler(warningHandler);
+    }
 
-		return _source.substring(0, _source.lastIndexOf("/")-1);
-	}
-	
-	public ASTResolver getASTResolver() {
-		return _resolver;
-	}
+    private String getSourcePath() {
 
-	public void setASTResolver(ASTResolver resolver) {
-		_resolver = resolver;
-	}
+        return _source.substring(0, _source.lastIndexOf("/") - 1);
+    }
+
+    public ASTResolver getASTResolver() {
+        return _resolver;
+    }
+
+    public void setASTResolver(ASTResolver resolver) {
+        _resolver = resolver;
+    }
 }

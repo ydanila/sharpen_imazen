@@ -31,79 +31,79 @@ import java.util.List;
 
 public abstract class CSMember extends CSNode implements CSAttributesContainer {
 
-	protected String _name;
-	
-	protected CSVisibility _visibility = CSVisibility.Internal;
-	
-	protected List<CSDocNode> _docs;
-	
-	private List<CSAttribute> _attributes = new ArrayList<CSAttribute>();
-	
+    protected String _name;
+
+    protected CSVisibility _visibility = CSVisibility.Internal;
+
+    protected List<CSDocNode> _docs;
+
+    private List<CSAttribute> _attributes = new ArrayList<CSAttribute>();
+
     private boolean _newModifier;
-	
 
-	protected CSMember(String name) {
-		_name = name;
-	}
 
-	public String name() {
-		return _name;
-	}
+    protected CSMember(String name) {
+        _name = name;
+    }
 
-	public void visibility(CSVisibility visibility) {
-		_visibility = visibility;
-	}
+    public String name() {
+        return _name;
+    }
 
-	public CSVisibility visibility() {
-		return _visibility;
-	}
-	
-	public void addDoc(CSDocNode node) {
-		if (null == _docs) {
-			_docs = new ArrayList<CSDocNode>();
-		}
-		_docs.add(node);
-		
-	}
+    public void visibility(CSVisibility visibility) {
+        _visibility = visibility;
+    }
 
-	public List<CSDocNode> docs() {
-		if (null == _docs) {
-			return Collections.emptyList();
-		}
-		return Collections.unmodifiableList(_docs);
-	}
-	
-	@Override
+    public CSVisibility visibility() {
+        return _visibility;
+    }
+
+    public void addDoc(CSDocNode node) {
+        if (null == _docs) {
+            _docs = new ArrayList<CSDocNode>();
+        }
+        _docs.add(node);
+
+    }
+
+    public List<CSDocNode> docs() {
+        if (null == _docs) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(_docs);
+    }
+
+    @Override
     public void addAttribute(CSAttribute attribute) {
-		_attributes.add(attribute);
-	}
-	
-	@Override
-    public boolean removeAttribute(String name) {
-		for (CSAttribute at : _attributes) {
-			if (at.name().equals(name)) {
-				_attributes.remove(at);
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	@Override
-    public List<CSAttribute> attributes() {
-		return Collections.unmodifiableList(_attributes);
-	}
-	
-	public String signature() {
-		return _name;
-	}
-	
-	public boolean isNewModifier() {
-		return _newModifier;
-	}
+        _attributes.add(attribute);
+    }
 
-	public void setNewModifier(boolean newModifier) {
-		_newModifier = newModifier;
-	}
+    @Override
+    public boolean removeAttribute(String name) {
+        for (CSAttribute at : _attributes) {
+            if (at.name().equals(name)) {
+                _attributes.remove(at);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<CSAttribute> attributes() {
+        return Collections.unmodifiableList(_attributes);
+    }
+
+    public String signature() {
+        return _name;
+    }
+
+    public boolean isNewModifier() {
+        return _newModifier;
+    }
+
+    public void setNewModifier(boolean newModifier) {
+        _newModifier = newModifier;
+    }
 
 }

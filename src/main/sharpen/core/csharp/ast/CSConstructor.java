@@ -22,42 +22,42 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public class CSConstructor extends CSMethodBase {
-	
-	private CSConstructorInvocationExpression _chainedConstructorInvocation;
-	
-	private CSConstructorModifier _modifier;
 
-	public CSConstructor() {
-		this(CSConstructorModifier.None);
-	}
-	
-	public CSConstructor(CSConstructorModifier modifier) {
-		super("ctor");
-		_modifier = modifier;
-	}
+    private CSConstructorInvocationExpression _chainedConstructorInvocation;
 
-	public CSConstructor(CSVisibility visibility) {
-		this();
-		visibility(visibility);
+    private CSConstructorModifier _modifier;
+
+    public CSConstructor() {
+        this(CSConstructorModifier.None);
     }
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSConstructor(CSConstructorModifier modifier) {
+        super("ctor");
+        _modifier = modifier;
+    }
 
-	public void chainedConstructorInvocation(CSConstructorInvocationExpression cie) {
-		_chainedConstructorInvocation = cie;
-	}
+    public CSConstructor(CSVisibility visibility) {
+        this();
+        visibility(visibility);
+    }
 
-	public CSConstructorInvocationExpression chainedConstructorInvocation() {
-		return _chainedConstructorInvocation;
-	}
-	
-	public CSConstructorModifier modifier() {
-		return _modifier;
-	}
-	
-	public boolean isStatic() {
-		return _modifier == CSConstructorModifier.Static;
-	}	
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public void chainedConstructorInvocation(CSConstructorInvocationExpression cie) {
+        _chainedConstructorInvocation = cie;
+    }
+
+    public CSConstructorInvocationExpression chainedConstructorInvocation() {
+        return _chainedConstructorInvocation;
+    }
+
+    public CSConstructorModifier modifier() {
+        return _modifier;
+    }
+
+    public boolean isStatic() {
+        return _modifier == CSConstructorModifier.Static;
+    }
 }

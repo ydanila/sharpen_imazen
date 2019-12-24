@@ -5,18 +5,18 @@ package sharpen.core.csharp.ast;
 
 public class CSMacroExpression extends CSExpression {
 
-	private final CSMacro _macro;
+    private final CSMacro _macro;
 
-	public CSMacroExpression(CSMacro macro) {
-		_macro = macro;
+    public CSMacroExpression(CSMacro macro) {
+        _macro = macro;
     }
 
-	@Override
+    @Override
     public void accept(CSVisitor visitor) {
-		visitor.visit(this);
+        visitor.visit(this);
     }
 
-	public CSNode macro() {
-		return _macro;
+    public CSNode macro() {
+        return _macro;
     }
 }

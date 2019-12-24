@@ -22,8 +22,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public enum CSFieldModifier {
-	Static,
-	Readonly,
-	Const,
-	Volatile
+    Static,
+    Readonly,
+    Const,
+    Volatile
 }

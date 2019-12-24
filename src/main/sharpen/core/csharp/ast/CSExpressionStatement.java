@@ -22,21 +22,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public class CSExpressionStatement extends CSStatement {
-	
-	private CSExpression _expression;
 
-	public CSExpressionStatement(int startPosition, CSExpression expression) {
-		super(startPosition); 
-		assert null != expression;
-		_expression = expression;
-	}
+    private CSExpression _expression;
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSExpressionStatement(int startPosition, CSExpression expression) {
+        super(startPosition);
+        assert null != expression;
+        _expression = expression;
+    }
 
-	public CSNode expression() {
-		return _expression;
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public CSNode expression() {
+        return _expression;
+    }
 
 }

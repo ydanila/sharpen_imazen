@@ -21,50 +21,54 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import static org.junit.Assert.*;
-import sharpen.core.*;
+import org.junit.Before;
+import org.junit.Test;
+import sharpen.core.Configuration;
+import sharpen.core.ConfigurationFactory;
+import sharpen.core.PascalCaseNamingStrategy;
 
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ConfigurationTestCase {
-	private Configuration _configuration;
-	
-  @Before
-	public void setUp() {
-		_configuration = ConfigurationFactory.defaultConfiguration();
-	}
-	
-	@Test
-	public void testIgnoredAnnotationsByDefault() {
-		
-		assertTrue(_configuration.isIgnoredAnnotation("java.lang.Override"));
-	}
-	
-	@Test
-	public void testDefaultMappings() {
-		assertMappedTypeName("javanese.Foo", "javanese.Foo");
-	}
+    private Configuration _configuration;
 
-	@Test
-	public void testMapNamespace() {		
-		_configuration.mapNamespace("^foo\\.bar", "System.IO");		
-		assertMappedTypeName("foo.bar.Writer", "System.IO.Writer");
-		
-		assertEquals("System.IO", _configuration.mappedNamespace("foo.bar"));
-	}
-	
-	@Test
-	public void testPascalCaseNamespaces() {
-		_configuration.setNamingStrategy(PascalCaseNamingStrategy.DEFAULT);
-		
-		assertMappedTypeName("foo.bar.Writer", "Foo.Bar.Writer");
-	}
+    @Before
+    public void setUp() {
+        _configuration = ConfigurationFactory.defaultConfiguration();
+    }
 
-	private void assertMappedTypeName(String typeName, String expected) {
-		assertEquals(expected, mappedTypeName(typeName));
-	}
+    @Test
+    public void testIgnoredAnnotationsByDefault() {
 
-	private String mappedTypeName(String typeName) {
-		return _configuration.mappedTypeName(typeName, typeName);
-	}
+        assertTrue(_configuration.isIgnoredAnnotation("java.lang.Override"));
+    }
+
+    @Test
+    public void testDefaultMappings() {
+        assertMappedTypeName("javanese.Foo", "javanese.Foo");
+    }
+
+    @Test
+    public void testMapNamespace() {
+        _configuration.mapNamespace("^foo\\.bar", "System.IO");
+        assertMappedTypeName("foo.bar.Writer", "System.IO.Writer");
+
+        assertEquals("System.IO", _configuration.mappedNamespace("foo.bar"));
+    }
+
+    @Test
+    public void testPascalCaseNamespaces() {
+        _configuration.setNamingStrategy(PascalCaseNamingStrategy.DEFAULT);
+
+        assertMappedTypeName("foo.bar.Writer", "Foo.Bar.Writer");
+    }
+
+    private void assertMappedTypeName(String typeName, String expected) {
+        assertEquals(expected, mappedTypeName(typeName));
+    }
+
+    private String mappedTypeName(String typeName) {
+        return _configuration.mappedTypeName(typeName, typeName);
+    }
 }

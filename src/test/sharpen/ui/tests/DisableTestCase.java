@@ -23,62 +23,64 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import java.util.*;
-
-import sharpen.core.*;
 import org.junit.Test;
+import sharpen.core.Configuration;
+import sharpen.core.ConfigurationFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class DisableTestCase extends AbstractConversionTestCase {
-	
-	@Test
-	public void testDisableMethod() throws Throwable {
-		runResourceTestCase("disable/DisableMethod");
-	}
-	
-	@Test
-	public void testDisableClass() throws Throwable {
-		runResourceTestCase("disable/DisableClass");
-	}
-	
-	@Test
-	public void testDisableInnerClass() throws Throwable {
-		runResourceTestCase("disable/DisableInnerClass");
-	}
-	
-	@Test
-	public void testDisableCompilationUnit() throws Throwable {
-		runResourceTestCase(newConfigWithOrganizeUsings(), "disable/DisableCompilationUnit");
-	}
-	
-	private Configuration newConfigWithOrganizeUsings() {
-		Configuration config = ConfigurationFactory.defaultConfiguration();
-		config.enableOrganizeUsings();
-		
-		return config;
-	}
 
-	@Test
-	public void testDisableMethodInInterface() throws Throwable {
-		runResourceTestCase("disable/DisabledMethodInInterface");
-	}
-	
-	@Test
-	public void testConditionalCompilation() throws Throwable {
-		final Configuration config = conditionalCompilationConfigFor("DisabledByConfig");
-		runResourceTestCase(config, "disable/NotSubjectToConditionalCompilation");
-		runResourceTestCase(config, "disable/disabled/TypeSubjectToConditionalCompilation");
-		runResourceTestCase(config, "disable/disabled/subpackage/TypesInSubPackagesShouldBeDisabledAlso");
-		
-	}
+    @Test
+    public void testDisableMethod() throws Throwable {
+        runResourceTestCase("disable/DisableMethod");
+    }
 
-	private Configuration conditionalCompilationConfigFor(String expression) {
-		Map<String, String> conditionals = new HashMap<String, String>();
-		conditionals.put("disable.disabled", expression);
-		Configuration config = ConfigurationFactory.defaultConfiguration();
-		config.conditionalCompilation(conditionals);		
-		
-		return config;
-	}
+    @Test
+    public void testDisableClass() throws Throwable {
+        runResourceTestCase("disable/DisableClass");
+    }
+
+    @Test
+    public void testDisableInnerClass() throws Throwable {
+        runResourceTestCase("disable/DisableInnerClass");
+    }
+
+    @Test
+    public void testDisableCompilationUnit() throws Throwable {
+        runResourceTestCase(newConfigWithOrganizeUsings(), "disable/DisableCompilationUnit");
+    }
+
+    private Configuration newConfigWithOrganizeUsings() {
+        Configuration config = ConfigurationFactory.defaultConfiguration();
+        config.enableOrganizeUsings();
+
+        return config;
+    }
+
+    @Test
+    public void testDisableMethodInInterface() throws Throwable {
+        runResourceTestCase("disable/DisabledMethodInInterface");
+    }
+
+    @Test
+    public void testConditionalCompilation() throws Throwable {
+        final Configuration config = conditionalCompilationConfigFor("DisabledByConfig");
+        runResourceTestCase(config, "disable/NotSubjectToConditionalCompilation");
+        runResourceTestCase(config, "disable/disabled/TypeSubjectToConditionalCompilation");
+        runResourceTestCase(config, "disable/disabled/subpackage/TypesInSubPackagesShouldBeDisabledAlso");
+
+    }
+
+    private Configuration conditionalCompilationConfigFor(String expression) {
+        Map<String, String> conditionals = new HashMap<String, String>();
+        conditionals.put("disable.disabled", expression);
+        Configuration config = ConfigurationFactory.defaultConfiguration();
+        config.conditionalCompilation(conditionals);
+
+        return config;
+    }
 
 }

@@ -26,51 +26,51 @@ import java.util.Collections;
 import java.util.List;
 
 public class CSVariableDeclaration extends CSNode implements CSAttributesContainer {
-	
-	private String _name;
-	private CSTypeReferenceExpression _type;
-	private CSExpression _initializer;
+
+    private String _name;
+    private CSTypeReferenceExpression _type;
+    private CSExpression _initializer;
     private List<CSAttribute> _attributes = new ArrayList<CSAttribute>();
     private boolean _isVarArgs;
     private boolean _declareType = true;
 
     public CSVariableDeclaration(String name, CSTypeReferenceExpression type) {
-		this(name, type, null);
-	}
+        this(name, type, null);
+    }
 
-	public CSVariableDeclaration(String name, CSTypeReferenceExpression type, CSExpression initializer) {
-		_name = name;
-		_type = type;
-		_initializer = initializer;
-	}
-	
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSVariableDeclaration(String name, CSTypeReferenceExpression type, CSExpression initializer) {
+        _name = name;
+        _type = type;
+        _initializer = initializer;
+    }
 
-	public CSTypeReferenceExpression type() {
-		return _type;
-	}
-	
-	public void type(CSTypeReferenceExpression type) {
-		_type = type;
-	}
-	
-	public String name() {
-		return _name;
-	}
-	
-	public void initializer(CSExpression initializer) {
-		_initializer = initializer;
-	}
-	
-	public CSExpression initializer() {
-		return _initializer;
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public void name(String name) {
-		_name = name;
-	}
+    public CSTypeReferenceExpression type() {
+        return _type;
+    }
+
+    public void type(CSTypeReferenceExpression type) {
+        _type = type;
+    }
+
+    public String name() {
+        return _name;
+    }
+
+    public void initializer(CSExpression initializer) {
+        _initializer = initializer;
+    }
+
+    public CSExpression initializer() {
+        return _initializer;
+    }
+
+    public void name(String name) {
+        _name = name;
+    }
 
     @Override
     public void addAttribute(CSAttribute attribute) {

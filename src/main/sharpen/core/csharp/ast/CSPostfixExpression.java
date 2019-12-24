@@ -23,12 +23,12 @@ package sharpen.core.csharp.ast;
 
 public class CSPostfixExpression extends CSUnaryExpression {
 
-	public CSPostfixExpression(String operator, CSExpression operand) {
-		super(operator, operand);
-	}
+    public CSPostfixExpression(String operator, CSExpression operand) {
+        super(operator, operand);
+    }
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

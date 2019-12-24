@@ -2,8 +2,8 @@
 
 package sharpen.core.framework;
 
-public interface Function <T>{
-	
-	public T apply();
+public interface Function<T> {
+
+    T apply();
 
 }

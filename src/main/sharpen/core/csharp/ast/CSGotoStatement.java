@@ -7,29 +7,29 @@ package sharpen.core.csharp.ast;
  */
 public class CSGotoStatement extends CSStatement {
 
-	private String _label;
-	private CSExpression _target;
-	
-	public CSGotoStatement(int startPosition, String label) {
-		super(startPosition);
-		_label = label;
-	}
+    private String _label;
+    private CSExpression _target;
 
-	public CSGotoStatement(int startPosition, CSExpression target) {
-		super(startPosition);
-		_target = target;
-	}
+    public CSGotoStatement(int startPosition, String label) {
+        super(startPosition);
+        _label = label;
+    }
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSGotoStatement(int startPosition, CSExpression target) {
+        super(startPosition);
+        _target = target;
+    }
 
-	public String label() {
-		return _label;
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public CSExpression target() {
-		return _target;
-	}
+    public String label() {
+        return _label;
+    }
+
+    public CSExpression target() {
+        return _target;
+    }
 
 }

@@ -22,22 +22,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public class CSDocTextNode extends CSDocNode {
-	
-	private String _text;
 
-	public CSDocTextNode(String text) {
-		if (null == text) {
-			throw new IllegalArgumentException("text");
-		}
-		_text = text;
-	}
+    private String _text;
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSDocTextNode(String text) {
+        if (null == text) {
+            throw new IllegalArgumentException("text");
+        }
+        _text = text;
+    }
 
-	public String text() {
-		return _text;
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public String text() {
+        return _text;
+    }
 
 }

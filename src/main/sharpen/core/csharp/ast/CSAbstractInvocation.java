@@ -21,31 +21,33 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class CSAbstractInvocation extends CSExpression {
-	
-	protected List<CSExpression> _arguments = new ArrayList<CSExpression>();
-	
-	public CSAbstractInvocation() {
-	}
 
-	public CSAbstractInvocation(CSExpression[] args) {
-		for (CSExpression arg : args) {
-			addArgument(arg);
-		}
-	}
-	
-	public void addArgument(CSExpression argument) {
-		_arguments.add(argument);
-	}
-	
-	public void removeArgument(int index) {
-		_arguments.remove(index);
-	}
-	
-	public List<CSExpression> arguments() {
-		return Collections.unmodifiableList(_arguments);
-	}
+    protected List<CSExpression> _arguments = new ArrayList<CSExpression>();
+
+    public CSAbstractInvocation() {
+    }
+
+    public CSAbstractInvocation(CSExpression[] args) {
+        for (CSExpression arg : args) {
+            addArgument(arg);
+        }
+    }
+
+    public void addArgument(CSExpression argument) {
+        _arguments.add(argument);
+    }
+
+    public void removeArgument(int index) {
+        _arguments.remove(index);
+    }
+
+    public List<CSExpression> arguments() {
+        return Collections.unmodifiableList(_arguments);
+    }
 
 }

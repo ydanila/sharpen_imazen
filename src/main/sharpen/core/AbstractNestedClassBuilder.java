@@ -23,9 +23,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core;
 
-import sharpen.core.csharp.ast.*;
-
 import org.eclipse.jdt.core.dom.*;
+import sharpen.core.csharp.ast.*;
 
 /**
  * @exclude
@@ -36,135 +35,135 @@ public abstract class AbstractNestedClassBuilder extends CSharpBuilder {
 
     private boolean _usesEnclosingMember;
 
-	public AbstractNestedClassBuilder(CSharpBuilder other) {
-		super(other);
-	}
+    public AbstractNestedClassBuilder(CSharpBuilder other) {
+        super(other);
+    }
 
-	protected abstract ITypeBinding nestedTypeBinding();
-	
-	@Override
-	protected CSExpression mapMethodTargetExpression(MethodInvocation node) {
-		if (null == node.getExpression()) {
-			return createEnclosingTargetReferences(node.getName());
-		}
-		return super.mapMethodTargetExpression(node);
-	}
+    protected abstract ITypeBinding nestedTypeBinding();
 
-	public boolean visit(ThisExpression node) {
-		if (null == node.getQualifier()) return super.visit(node);
-		pushExpression(createEnclosingThisReference(node.getQualifier().resolveTypeBinding(), true));
-		return false;
-	}
+    @Override
+    protected CSExpression mapMethodTargetExpression(MethodInvocation node) {
+        if (null == node.getExpression()) {
+            return createEnclosingTargetReferences(node.getName());
+        }
+        return super.mapMethodTargetExpression(node);
+    }
 
-	public boolean visit(SimpleName name) {
-		if (isInstanceFieldReference(name)) {
-			pushExpression(createEnclosingReferences(name));
-			return false;
-		}
-		return super.visit(name);
-	}
+    public boolean visit(ThisExpression node) {
+        if (null == node.getQualifier()) return super.visit(node);
+        pushExpression(createEnclosingThisReference(node.getQualifier().resolveTypeBinding(), true));
+        return false;
+    }
 
-	private boolean isInstanceFieldReference(SimpleName name) {
-		IBinding binding = name.resolveBinding();
-		if (IBinding.VARIABLE != binding.getKind()) return false;
-		return ((IVariableBinding)binding).isField();
-	}
+    public boolean visit(SimpleName name) {
+        if (isInstanceFieldReference(name)) {
+            pushExpression(createEnclosingReferences(name));
+            return false;
+        }
+        return super.visit(name);
+    }
 
-	private CSExpression createEnclosingReferences(SimpleName name) {
-		CSExpression target = createEnclosingTargetReferences(name);
-		return new CSMemberReferenceExpression(target, mappedName(name));
-	}
+    private boolean isInstanceFieldReference(SimpleName name) {
+        IBinding binding = name.resolveBinding();
+        if (IBinding.VARIABLE != binding.getKind()) return false;
+        return ((IVariableBinding) binding).isField();
+    }
 
-	private CSExpression createEnclosingTargetReferences(SimpleName name) {
-		ITypeBinding enclosingClassBinding = getDeclaringClass(name);
-		
-		CSExpression target = isStaticMember(name)
-			? createTypeReference(enclosingClassBinding)
-			: createEnclosingThisReference(enclosingClassBinding);
-		return target;
-	}
+    private CSExpression createEnclosingReferences(SimpleName name) {
+        CSExpression target = createEnclosingTargetReferences(name);
+        return new CSMemberReferenceExpression(target, mappedName(name));
+    }
 
-	private CSExpression createEnclosingThisReference(ITypeBinding enclosingClassBinding) {
-		return createEnclosingThisReference(enclosingClassBinding, false);
-	}
+    private CSExpression createEnclosingTargetReferences(SimpleName name) {
+        ITypeBinding enclosingClassBinding = getDeclaringClass(name);
 
-	private CSExpression createEnclosingThisReference(
-			ITypeBinding enclosingClassBinding, boolean ignoreSuperclass) {
-		CSExpression enclosing = new CSThisExpression();			
-		ITypeBinding binding = nestedTypeBinding();
-		ITypeBinding to = enclosingClassBinding;
-		while (binding != to && (ignoreSuperclass || !isSuperclass(binding, to))) {
-			requireEnclosingReference();
-			enclosing = new CSMemberReferenceExpression(enclosing, "_enclosing");
-			binding = binding.getDeclaringClass();
-			if (null == binding) break;
-		}
-		return enclosing;
-	}
-	
-	protected boolean isEnclosingReferenceRequired() {
-		return _usesEnclosingMember;
-	}
-	
-	protected void requireEnclosingReference() {
-		_usesEnclosingMember = true;
-	}
+        CSExpression target = isStaticMember(name)
+                ? createTypeReference(enclosingClassBinding)
+                : createEnclosingThisReference(enclosingClassBinding);
+        return target;
+    }
 
-	private String mappedName(SimpleName name) {
-		IBinding binding = name.resolveBinding();
-		return binding instanceof IMethodBinding ? mappedMethodName((IMethodBinding) binding) : identifier(name);
-	}
+    private CSExpression createEnclosingThisReference(ITypeBinding enclosingClassBinding) {
+        return createEnclosingThisReference(enclosingClassBinding, false);
+    }
 
-	private boolean isStaticMember(SimpleName name) {
-		return Modifier.isStatic(name.resolveBinding().getModifiers());
-	}
+    private CSExpression createEnclosingThisReference(
+            ITypeBinding enclosingClassBinding, boolean ignoreSuperclass) {
+        CSExpression enclosing = new CSThisExpression();
+        ITypeBinding binding = nestedTypeBinding();
+        ITypeBinding to = enclosingClassBinding;
+        while (binding != to && (ignoreSuperclass || !isSuperclass(binding, to))) {
+            requireEnclosingReference();
+            enclosing = new CSMemberReferenceExpression(enclosing, "_enclosing");
+            binding = binding.getDeclaringClass();
+            if (null == binding) break;
+        }
+        return enclosing;
+    }
 
-	private boolean isSuperclass(ITypeBinding type, ITypeBinding candidate) {
-		ITypeBinding superClass = type.getSuperclass().getTypeDeclaration();
-		candidate = candidate.getTypeDeclaration();
-		while (null != superClass) {
-			if (superClass == candidate) {
-				return true;
-			}
-			superClass = superClass.getSuperclass();
-		}
-		return false;
-	}
+    protected boolean isEnclosingReferenceRequired() {
+        return _usesEnclosingMember;
+    }
 
-	private ITypeBinding getDeclaringClass(Name reference) {
-		IBinding binding = reference.resolveBinding();
-		switch (binding.getKind()) {
-			case IBinding.METHOD: {
-				return ((IMethodBinding)binding).getDeclaringClass().getTypeDeclaration(); 
-			}
-			case IBinding.VARIABLE: {
-				IVariableBinding variable = (IVariableBinding)binding;
-				return variable.getDeclaringClass().getTypeDeclaration();
-			}
-		}
-		//throw new UnsupportedOperationException();
-		return null;
-	}
+    protected void requireEnclosingReference() {
+        _usesEnclosingMember = true;
+    }
 
-	protected CSField createEnclosingField() {
-		return CSharpCode.newPrivateReadonlyField(ENCLOSING_FIELD, enclosingTypeReference());
-	}
+    private String mappedName(SimpleName name) {
+        IBinding binding = name.resolveBinding();
+        return binding instanceof IMethodBinding ? mappedMethodName((IMethodBinding) binding) : identifier(name);
+    }
 
-	private CSTypeReference enclosingTypeReference() {
-		CSTypeReference tr = new CSTypeReference(_currentType.name());
-		for (CSTypeParameter tp : _currentType.typeParameters())
-			tr.addTypeArgument(new CSTypeReference (tp.name()));
-		return tr;
-	}
+    private boolean isStaticMember(SimpleName name) {
+        return Modifier.isStatic(name.resolveBinding().getModifiers());
+    }
 
-	protected CSInfixExpression createFieldAssignment(String fieldName, String rvalue) {
-		return createFieldAssignment(fieldName, new CSReferenceExpression(rvalue));
-	}
+    private boolean isSuperclass(ITypeBinding type, ITypeBinding candidate) {
+        ITypeBinding superClass = type.getSuperclass().getTypeDeclaration();
+        candidate = candidate.getTypeDeclaration();
+        while (null != superClass) {
+            if (superClass == candidate) {
+                return true;
+            }
+            superClass = superClass.getSuperclass();
+        }
+        return false;
+    }
 
-	protected CSInfixExpression createFieldAssignment(String fieldName,
-			final CSExpression fieldValue) {
-		CSExpression fieldReference = new CSMemberReferenceExpression(new CSThisExpression(), fieldName);
-		return new CSInfixExpression("=", fieldReference, fieldValue);
-	}
+    private ITypeBinding getDeclaringClass(Name reference) {
+        IBinding binding = reference.resolveBinding();
+        switch (binding.getKind()) {
+            case IBinding.METHOD: {
+                return ((IMethodBinding) binding).getDeclaringClass().getTypeDeclaration();
+            }
+            case IBinding.VARIABLE: {
+                IVariableBinding variable = (IVariableBinding) binding;
+                return variable.getDeclaringClass().getTypeDeclaration();
+            }
+        }
+        //throw new UnsupportedOperationException();
+        return null;
+    }
+
+    protected CSField createEnclosingField() {
+        return CSharpCode.newPrivateReadonlyField(ENCLOSING_FIELD, enclosingTypeReference());
+    }
+
+    private CSTypeReference enclosingTypeReference() {
+        CSTypeReference tr = new CSTypeReference(_currentType.name());
+        for (CSTypeParameter tp : _currentType.typeParameters())
+            tr.addTypeArgument(new CSTypeReference(tp.name()));
+        return tr;
+    }
+
+    protected CSInfixExpression createFieldAssignment(String fieldName, String rvalue) {
+        return createFieldAssignment(fieldName, new CSReferenceExpression(rvalue));
+    }
+
+    protected CSInfixExpression createFieldAssignment(String fieldName,
+                                                      final CSExpression fieldValue) {
+        CSExpression fieldReference = new CSMemberReferenceExpression(new CSThisExpression(), fieldName);
+        return new CSInfixExpression("=", fieldReference, fieldValue);
+    }
 
 }

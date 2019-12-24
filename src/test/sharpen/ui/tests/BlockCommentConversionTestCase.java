@@ -22,17 +22,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /* Copyright (C) 2004 - 2006 Versant Inc. http://www.db4o.com */
 
 package sharpen.ui.tests;
+
 import org.junit.Test;
 
 public class BlockCommentConversionTestCase extends AbstractConversionTestCase {
 
-	@Test
-	public void headerBlockComments() throws Throwable {
-		runResourceTestCase("comments/HeaderBlock");
-	}
+    @Test
+    public void headerBlockComments() throws Throwable {
+        runResourceTestCase("comments/HeaderBlock");
+    }
 
-	@Test
-	public void bodyBlockComments() throws Throwable {
-		runResourceTestCase("comments/BodyBlock");
-	}
+    @Test
+    public void bodyBlockComments() throws Throwable {
+        runResourceTestCase("comments/BodyBlock");
+    }
 }

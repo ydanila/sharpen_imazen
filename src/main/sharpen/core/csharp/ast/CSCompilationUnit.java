@@ -21,102 +21,105 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class CSCompilationUnit extends CSNode {
 
 
-	private String _elementName;
-	private boolean _ignore;
-	private String _namespace;
+    private String _elementName;
+    private boolean _ignore;
+    private String _namespace;
 
-	private final List<CSUsing> _usings = new ArrayList<CSUsing>();
-	private final List<CSType> _types = new ArrayList<CSType>();
-	private final List<CSComment> _comments = new ArrayList<CSComment>();
-	private int _packagePosition;
+    private final List<CSUsing> _usings = new ArrayList<CSUsing>();
+    private final List<CSType> _types = new ArrayList<CSType>();
+    private final List<CSComment> _comments = new ArrayList<CSComment>();
+    private int _packagePosition;
 
-	public void namespace(String value) {
-		_namespace = value;
-	}
-	
-	public String namespace() {
-		return _namespace;
-	}
-	
-	public void addUsing(CSUsing using) {
-		if (namespaceAlreadyUsed(using.namespace()))
-			return;
+    public void namespace(String value) {
+        _namespace = value;
+    }
 
-		_usings.add(using);
-	}
-	
-	private boolean namespaceAlreadyUsed(String namespace) {
+    public String namespace() {
+        return _namespace;
+    }
 
-		//	do not add using with same name as current namespace
-		if(!isEmpty(_namespace) && !isEmpty(namespace) && namespace.equals(_namespace)){
-			return true;
-		}
+    public void addUsing(CSUsing using) {
+        if (namespaceAlreadyUsed(using.namespace()))
+            return;
 
-		for (CSUsing us : _usings)
-			if (us.namespace().equals(namespace))
-				return true;
+        _usings.add(using);
+    }
 
-		return false;
-	}
+    private boolean namespaceAlreadyUsed(String namespace) {
 
-	private boolean isEmpty(String namespace) {
-		return namespace == null || namespace.length() == 0;
-	}
+        //	do not add using with same name as current namespace
+        if (!isEmpty(_namespace) && !isEmpty(namespace) && namespace.equals(_namespace)) {
+            return true;
+        }
 
-	public void addType(CSType type) {
-		_types.add(type);
-	}
-	
-	public Collection<CSUsing> usings() {
-		return Collections.unmodifiableList(_usings);
-	}
-	
-	public Collection<CSType> types() {
-		return Collections.unmodifiableList(_types);
-	}
-	
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+        for (CSUsing us : _usings)
+            if (us.namespace().equals(namespace))
+                return true;
 
-	public void insertTypeBefore(CSType type, CSType anchor) {
-		_types.add(_types.indexOf(anchor), type);
-	}
+        return false;
+    }
 
-	public boolean ignore() {
-		return _ignore;
-	}
+    private boolean isEmpty(String namespace) {
+        return namespace == null || namespace.length() == 0;
+    }
 
-	public void ignore(boolean value) {
-		_ignore = value;
-	}
-	
-	public String elementName() {
-		return _elementName;
-	}
+    public void addType(CSType type) {
+        _types.add(type);
+    }
 
-	public void elementName(String elementName) {
-		_elementName = elementName;		
-	}
+    public Collection<CSUsing> usings() {
+        return Collections.unmodifiableList(_usings);
+    }
 
-	public void addComment(CSComment lineComment) {
-		_comments.add(lineComment);
-	}
+    public Collection<CSType> types() {
+        return Collections.unmodifiableList(_types);
+    }
 
-	public List<CSComment> comments() {
-		return Collections.unmodifiableList(_comments);
-	}
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
-	public int getPackagePosition() {
-		return _packagePosition; 
-	}
-	
-	public void setPackagePosition(int startPosition) {
-		_packagePosition = startPosition; 
-	}
+    public void insertTypeBefore(CSType type, CSType anchor) {
+        _types.add(_types.indexOf(anchor), type);
+    }
+
+    public boolean ignore() {
+        return _ignore;
+    }
+
+    public void ignore(boolean value) {
+        _ignore = value;
+    }
+
+    public String elementName() {
+        return _elementName;
+    }
+
+    public void elementName(String elementName) {
+        _elementName = elementName;
+    }
+
+    public void addComment(CSComment lineComment) {
+        _comments.add(lineComment);
+    }
+
+    public List<CSComment> comments() {
+        return Collections.unmodifiableList(_comments);
+    }
+
+    public int getPackagePosition() {
+        return _packagePosition;
+    }
+
+    public void setPackagePosition(int startPosition) {
+        _packagePosition = startPosition;
+    }
 }

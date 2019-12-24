@@ -22,25 +22,25 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public class CSDocAttributeNode extends CSDocNode {
-	
-	private String _name;
-	private String _value;
 
-	public CSDocAttributeNode(String name, String value) {
-		_name = name;
-		_value = value;
-	}
-	
-	public String name() {
-		return _name;
-	}
-	
-	public String value() {
-		return _value;
-	}
+    private String _name;
+    private String _value;
 
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSDocAttributeNode(String name, String value) {
+        _name = name;
+        _value = value;
+    }
+
+    public String name() {
+        return _name;
+    }
+
+    public String value() {
+        return _value;
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

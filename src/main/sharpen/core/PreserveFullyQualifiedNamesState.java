@@ -3,8 +3,8 @@ package sharpen.core;
 
 public interface PreserveFullyQualifiedNamesState {
 
-	void using(boolean value, Runnable runnable);
+    void using(boolean value, Runnable runnable);
 
-	boolean value();
+    boolean value();
 
 }

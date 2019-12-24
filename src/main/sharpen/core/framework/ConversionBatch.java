@@ -1,175 +1,177 @@
 package sharpen.core.framework;
 
-import java.io.*;
-import java.util.*;
-
-import org.eclipse.core.runtime.*;
-import org.eclipse.jdt.core.*;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
 import sharpen.core.Configuration;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ConversionBatch {
 
-	private String[] _sourceFiles;
-	private String[] _sourcePathEntries;
-	private String[] _classPathEntries;
+    private String[] _sourceFiles;
+    private String[] _sourcePathEntries;
+    private String[] _classPathEntries;
 
-	private IProgressMonitor _progressMonitor = new NullProgressMonitor();
+    private IProgressMonitor _progressMonitor = new NullProgressMonitor();
 
-	private final ASTParser _parser;
-	private boolean _continueOnError;
+    private final ASTParser _parser;
+    private boolean _continueOnError;
 
-	public ConversionBatch() {
-		_parser = ASTParser.newParser(Configuration.PARSER_LEVEL);
-		_parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		
-		@SuppressWarnings("unchecked")
-		Map<String, String> options = JavaCore.getOptions();
-		options.put(JavaCore.COMPILER_COMPLIANCE, Configuration.PLATFORM_VERSION);
-		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
-				Configuration.PLATFORM_VERSION);
-		options.put(JavaCore.COMPILER_SOURCE, Configuration.PLATFORM_VERSION);
-		_parser.setCompilerOptions(options);
-	}
+    public ConversionBatch() {
+        _parser = ASTParser.newParser(Configuration.PARSER_LEVEL);
+        _parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
-	public boolean isContinueOnError() {
-		return _continueOnError;
-	}
+        @SuppressWarnings("unchecked")
+        Map<String, String> options = JavaCore.getOptions();
+        options.put(JavaCore.COMPILER_COMPLIANCE, Configuration.PLATFORM_VERSION);
+        options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
+                Configuration.PLATFORM_VERSION);
+        options.put(JavaCore.COMPILER_SOURCE, Configuration.PLATFORM_VERSION);
+        _parser.setCompilerOptions(options);
+    }
 
-	public void setContinueOnError(boolean continueOnError) {
-		this._continueOnError = continueOnError;
-	}
+    public boolean isContinueOnError() {
+        return _continueOnError;
+    }
 
-	/**
-	 * Defines the set of java source files to be converted.
-	 * 
-	 * @param source
-	 *            iterator of sourceFiles instances
-	 */
-	public void setsourceFiles(String... sourceFiles) {
-		if (null == sourceFiles || 0 == sourceFiles.length) {
-			throw new IllegalArgumentException("sourceFiles");
-		}
-		_sourceFiles = sourceFiles;
-	}
+    public void setContinueOnError(boolean continueOnError) {
+        this._continueOnError = continueOnError;
+    }
 
-	public void setsourceFiles(List<String> sourceFiles) {
-		if (null == sourceFiles || sourceFiles.isEmpty()) {
-			throw new IllegalArgumentException("sourceFiles");
-		}
-		_sourceFiles = sourceFiles.toArray(new String[sourceFiles.size()]);
-	}
-	
-	/**
-	 * Defines the set of java source files path to be converted.
-	 * 
-	 * @param source
-	 *            iterator of sourcePathEntries instances
-	 */
-	public void setsourcePathEntries(String... sourcePathEntries) {
-		if (null == sourcePathEntries || 0 == sourcePathEntries.length) {
-			throw new IllegalArgumentException("sourcePathEntries");
-		}
-		_sourcePathEntries = sourcePathEntries;
-	}
+    /**
+     * Defines the set of java source files to be converted.
+     *
+     * @param source iterator of sourceFiles instances
+     */
+    public void setsourceFiles(String... sourceFiles) {
+        if (null == sourceFiles || 0 == sourceFiles.length) {
+            throw new IllegalArgumentException("sourceFiles");
+        }
+        _sourceFiles = sourceFiles;
+    }
 
-	public void setsourcePathEntries(List<String> sourcePathEntries) {
-		if (null == sourcePathEntries || sourcePathEntries.isEmpty()) {
-			throw new IllegalArgumentException("sourcePathEntries");
-		}
-		_sourcePathEntries= sourcePathEntries.toArray(new String[sourcePathEntries.size()]);
-	}
-	/**
-	 * Defines the set of java executable files path to be converted.
-	 * 
-	 * @param source
-	 *            iterator of classPathEntries instances
-	 */
-	public void setclassPathEntries(String... classPathEntries) {
-		if (null == classPathEntries || 0 == classPathEntries.length) {
-			throw new IllegalArgumentException("classPathEntries");
-		}
-		_classPathEntries = classPathEntries;
-	}
+    public void setsourceFiles(List<String> sourceFiles) {
+        if (null == sourceFiles || sourceFiles.isEmpty()) {
+            throw new IllegalArgumentException("sourceFiles");
+        }
+        _sourceFiles = sourceFiles.toArray(new String[sourceFiles.size()]);
+    }
 
-	public void setclassPathEntries(List<String> classPathEntries) {
-		if (null != classPathEntries || classPathEntries.isEmpty() ==false) {
-			_classPathEntries= classPathEntries.toArray(new String[classPathEntries.size()]);
-		}
-	}
-	
-	public void setProgressMonitor(IProgressMonitor monitor) {
-		if (null == monitor) {
-			throw new IllegalArgumentException("monitor");
-		}
-		_progressMonitor = monitor;
-	}
+    /**
+     * Defines the set of java source files path to be converted.
+     *
+     * @param source iterator of sourcePathEntries instances
+     */
+    public void setsourcePathEntries(String... sourcePathEntries) {
+        if (null == sourcePathEntries || 0 == sourcePathEntries.length) {
+            throw new IllegalArgumentException("sourcePathEntries");
+        }
+        _sourcePathEntries = sourcePathEntries;
+    }
 
-	/**
-	 * 
-	 * @throws CoreException
-	 * @throws IOException
-	 * @throws InterruptedException 
-	 * @throws IllegalStateException
-	 *             when source is not set
-	 */
-	public void run() throws CoreException, IOException {
-	
-		if (null == _sourceFiles) {
-			throw new IllegalStateException("source was not set");
-		}
-		
-		final ArrayList<CompilationUnitPair> pairs = parseCompilationUnits();
-		final ASTResolver resolver = new DefaultASTResolver(pairs);
-		
-		_progressMonitor.beginTask("converting", pairs.size());
-		for (final CompilationUnitPair pair : pairs) {
-			if (_progressMonitor.isCanceled()) return;
+    public void setsourcePathEntries(List<String> sourcePathEntries) {
+        if (null == sourcePathEntries || sourcePathEntries.isEmpty()) {
+            throw new IllegalArgumentException("sourcePathEntries");
+        }
+        _sourcePathEntries = sourcePathEntries.toArray(new String[sourcePathEntries.size()]);
+    }
 
-			try {
-				convertPair(resolver, pair);
-			} catch (RuntimeException ex) {
-				if (!isContinueOnError()) {
-					throw ex;
-				}
+    /**
+     * Defines the set of java executable files path to be converted.
+     *
+     * @param source iterator of classPathEntries instances
+     */
+    public void setclassPathEntries(String... classPathEntries) {
+        if (null == classPathEntries || 0 == classPathEntries.length) {
+            throw new IllegalArgumentException("classPathEntries");
+        }
+        _classPathEntries = classPathEntries;
+    }
 
-				if (ex instanceof IllegalArgumentException
-					|| ex instanceof ClassCastException) {
-					// we still want to notify the user about the problem
-					ex.printStackTrace(System.err);
-				} else {
-					// not a recoverable exception
-					throw ex;
-				}
-			}
-		}
-	}
+    public void setclassPathEntries(List<String> classPathEntries) {
+        if (null != classPathEntries || classPathEntries.isEmpty() == false) {
+            _classPathEntries = classPathEntries.toArray(new String[classPathEntries.size()]);
+        }
+    }
 
-	private void convertPair(final ASTResolver resolver, final CompilationUnitPair pair) throws CoreException,
-			IOException {
-		try {
-			_progressMonitor.subTask(pair.source.replace("\\", "/"));
-			convertCompilationUnit(resolver, pair.source.replace("\\", "/"), pair.ast);
-		} finally {
-			_progressMonitor.worked(1);
-		}
-	}
-	
-	protected abstract void convertCompilationUnit(ASTResolver resolver, String sourceFiles,
-			CompilationUnit ast) throws CoreException, IOException;
+    public void setProgressMonitor(IProgressMonitor monitor) {
+        if (null == monitor) {
+            throw new IllegalArgumentException("monitor");
+        }
+        _progressMonitor = monitor;
+    }
 
-	private ArrayList<CompilationUnitPair> parseCompilationUnits() {
-		final ArrayList<CompilationUnitPair> pairs = new ArrayList<CompilationUnitPair>(_sourceFiles.length);
-		FileASTRequestor  requestor = new FileASTRequestor () {
-			@Override
-			public void acceptAST(String  source, CompilationUnit ast) {
-				pairs.add(new CompilationUnitPair(source, ast));
-			}
-		};
-		_parser.setEnvironment(_classPathEntries, _sourcePathEntries, null, true);
-		_parser.setResolveBindings(true);
-		_parser.createASTs(_sourceFiles, null, new String[0], requestor, _progressMonitor);
-		return pairs;
-	}
+    /**
+     * @throws CoreException
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws IllegalStateException when source is not set
+     */
+    public void run() throws CoreException, IOException {
+
+        if (null == _sourceFiles) {
+            throw new IllegalStateException("source was not set");
+        }
+
+        final ArrayList<CompilationUnitPair> pairs = parseCompilationUnits();
+        final ASTResolver resolver = new DefaultASTResolver(pairs);
+
+        _progressMonitor.beginTask("converting", pairs.size());
+        for (final CompilationUnitPair pair : pairs) {
+            if (_progressMonitor.isCanceled()) return;
+
+            try {
+                convertPair(resolver, pair);
+            } catch (RuntimeException ex) {
+                if (!isContinueOnError()) {
+                    throw ex;
+                }
+
+                if (ex instanceof IllegalArgumentException
+                        || ex instanceof ClassCastException) {
+                    // we still want to notify the user about the problem
+                    ex.printStackTrace(System.err);
+                } else {
+                    // not a recoverable exception
+                    throw ex;
+                }
+            }
+        }
+    }
+
+    private void convertPair(final ASTResolver resolver, final CompilationUnitPair pair) throws CoreException,
+            IOException {
+        try {
+            _progressMonitor.subTask(pair.source.replace("\\", "/"));
+            convertCompilationUnit(resolver, pair.source.replace("\\", "/"), pair.ast);
+        } finally {
+            _progressMonitor.worked(1);
+        }
+    }
+
+    protected abstract void convertCompilationUnit(ASTResolver resolver, String sourceFiles,
+                                                   CompilationUnit ast) throws CoreException, IOException;
+
+    private ArrayList<CompilationUnitPair> parseCompilationUnits() {
+        final ArrayList<CompilationUnitPair> pairs = new ArrayList<CompilationUnitPair>(_sourceFiles.length);
+        FileASTRequestor requestor = new FileASTRequestor() {
+            @Override
+            public void acceptAST(String source, CompilationUnit ast) {
+                pairs.add(new CompilationUnitPair(source, ast));
+            }
+        };
+        _parser.setEnvironment(_classPathEntries, _sourcePathEntries, null, true);
+        _parser.setResolveBindings(true);
+        _parser.createASTs(_sourceFiles, null, new String[0], requestor, _progressMonitor);
+        return pairs;
+    }
 
 }

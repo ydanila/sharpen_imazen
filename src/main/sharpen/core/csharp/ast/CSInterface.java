@@ -22,15 +22,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public class CSInterface extends CSTypeDeclaration {
-	public CSInterface(String name) {
-		super(name);
-	}
-	
-	public boolean isInterface() {
-		return true;
-	}
-	
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSInterface(String name) {
+        super(name);
+    }
+
+    public boolean isInterface() {
+        return true;
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 }

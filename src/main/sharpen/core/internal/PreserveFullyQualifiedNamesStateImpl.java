@@ -1,18 +1,18 @@
 /* Copyright (C) 2009  Versant Inc.   http://www.db4o.com */
 package sharpen.core.internal;
 
-import sharpen.core.*;
-import sharpen.core.framework.*;
+import sharpen.core.PreserveFullyQualifiedNamesState;
+import sharpen.core.framework.DynamicVariable;
 
 public class PreserveFullyQualifiedNamesStateImpl implements PreserveFullyQualifiedNamesState {
 
-	public void using(boolean value, Runnable runnable) {
-		_value.using(value, runnable);
-	}
+    public void using(boolean value, Runnable runnable) {
+        _value.using(value, runnable);
+    }
 
-	public boolean value() {
-		return _value.value();
-	}
+    public boolean value() {
+        return _value.value();
+    }
 
-	private final DynamicVariable<Boolean> _value = DynamicVariable.newInstance(Boolean.FALSE);
+    private final DynamicVariable<Boolean> _value = DynamicVariable.newInstance(Boolean.FALSE);
 }

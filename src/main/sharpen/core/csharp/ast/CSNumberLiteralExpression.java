@@ -22,18 +22,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core.csharp.ast;
 
 public class CSNumberLiteralExpression extends CSExpression {
-	
-	private String _token;
 
-	public CSNumberLiteralExpression(String token) {
-		_token = token;
-	}
-	
-	public String token() {
-		return _token;
-	}
-	
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    private String _token;
+
+    public CSNumberLiteralExpression(String token) {
+        _token = token;
+    }
+
+    public String token() {
+        return _token;
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 }

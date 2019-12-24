@@ -21,37 +21,37 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import sharpen.core.Configuration;
 import org.junit.Test;
+import sharpen.core.Configuration;
 
 public class NativeTypeSystemTestCase extends AbstractConversionTestCase {
-	@Test
-	public void testClassToType() throws Throwable {
-		runResourceTestCase("nativeTypeSystem/ClassToType");
-	}
-	
-	@Test
-	public void testStringMethods() throws Throwable {
-		runResourceTestCase("nativeTypeSystem/StringMethods1");
-	}
-	
-	@Test
-	public void testReflection() throws Throwable {
-		runResourceTestCase(nativePascalCase(), "nativeTypeSystem/Reflection");
-	}
-	
-	
-	private Configuration nativePascalCase() {
-		return enableNativeTypeSystem(newPascalCasePlusConfiguration());
-	}
+    @Test
+    public void testClassToType() throws Throwable {
+        runResourceTestCase("nativeTypeSystem/ClassToType");
+    }
 
-	@Override
-	protected Configuration getConfiguration() {
-		return enableNativeTypeSystem(super.getConfiguration());
-	}
+    @Test
+    public void testStringMethods() throws Throwable {
+        runResourceTestCase("nativeTypeSystem/StringMethods1");
+    }
 
-	private Configuration enableNativeTypeSystem(Configuration c) {
-		c.enableNativeTypeSystem();
-		return c;
-	}
+    @Test
+    public void testReflection() throws Throwable {
+        runResourceTestCase(nativePascalCase(), "nativeTypeSystem/Reflection");
+    }
+
+
+    private Configuration nativePascalCase() {
+        return enableNativeTypeSystem(newPascalCasePlusConfiguration());
+    }
+
+    @Override
+    protected Configuration getConfiguration() {
+        return enableNativeTypeSystem(super.getConfiguration());
+    }
+
+    private Configuration enableNativeTypeSystem(Configuration c) {
+        c.enableNativeTypeSystem();
+        return c;
+    }
 }

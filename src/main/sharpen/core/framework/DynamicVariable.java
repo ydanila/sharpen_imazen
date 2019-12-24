@@ -25,38 +25,38 @@ package sharpen.core.framework;
 
 public class DynamicVariable<T> {
 
-	public static <T> DynamicVariable<T> newInstance(T initialValue) {
-		return new DynamicVariable<T>(initialValue);
-	}
-	
-	private T _value;
-	
-	public DynamicVariable(T initialValue) {
-		_value = initialValue;
-	}
-	
-	public T value() {
-		return _value;
-	}
-	
-	public void using(T value, Runnable block) {
-		T oldValue = _value;
-		_value = value;
-		try {
-			block.run();
-		} finally {
-			_value = oldValue;
-		}
-	}
-	
-	public <TRESULT> TRESULT using(final T value, final Producer<TRESULT> producer) {
-		final ByRef<TRESULT> result = new ByRef<TRESULT>();
-		using(value, new Runnable() {
-			public void run() {
-				result.value = producer.produce();
-			}
-		});
-		return result.value;
-	}
+    public static <T> DynamicVariable<T> newInstance(T initialValue) {
+        return new DynamicVariable<T>(initialValue);
+    }
+
+    private T _value;
+
+    public DynamicVariable(T initialValue) {
+        _value = initialValue;
+    }
+
+    public T value() {
+        return _value;
+    }
+
+    public void using(T value, Runnable block) {
+        T oldValue = _value;
+        _value = value;
+        try {
+            block.run();
+        } finally {
+            _value = oldValue;
+        }
+    }
+
+    public <TRESULT> TRESULT using(final T value, final Producer<TRESULT> producer) {
+        final ByRef<TRESULT> result = new ByRef<TRESULT>();
+        using(value, new Runnable() {
+            public void run() {
+                result.value = producer.produce();
+            }
+        });
+        return result.value;
+    }
 
 }

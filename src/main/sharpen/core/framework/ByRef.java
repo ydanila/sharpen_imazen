@@ -3,18 +3,18 @@
 package sharpen.core.framework;
 
 public class ByRef<T> {
-	
-	public T value;
-	
-	public ByRef() {
-	}
-	
-	public ByRef(T initialValue) {
-		value = initialValue;
-	}
 
-	public static <T> ByRef<T> newInstance() {
-		return new ByRef();
-	}
+    public T value;
+
+    public ByRef() {
+    }
+
+    public ByRef(T initialValue) {
+        value = initialValue;
+    }
+
+    public static <T> ByRef<T> newInstance() {
+        return new ByRef();
+    }
 
 }

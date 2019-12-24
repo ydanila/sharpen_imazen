@@ -23,10 +23,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.List;
 
 public interface CSTypeParameterProvider {
-	void addTypeParameter(CSTypeParameter typeParameter);
-	
-	List<CSTypeParameter> typeParameters();
+    void addTypeParameter(CSTypeParameter typeParameter);
+
+    List<CSTypeParameter> typeParameters();
 }

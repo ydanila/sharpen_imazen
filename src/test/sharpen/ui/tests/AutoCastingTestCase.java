@@ -22,55 +22,56 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /* Copyright (C) 2004 - 2006 Versant Inc. http://www.db4o.com */
 
 package sharpen.ui.tests;
+
 import org.junit.Test;
 import sharpen.core.Configuration;
 
 public class AutoCastingTestCase extends AbstractConversionTestCase {
 
-	@Override
-	protected Configuration getConfiguration() {
-		final Configuration config = super.getConfiguration();
-		config.mapType("java.lang.Double", "double?");
-		config.mapType("java.lang.Integer", "int?");
-		config.mapType("java.lang.Long", "long?");
-		config.mapType("java.lang.Float", "float?");
-		config.mapType("java.lang.Boolean", "bool?");
-		config.mapType("java.util.Date", "System.DateTime?");
-		return config;
-	}
+    @Override
+    protected Configuration getConfiguration() {
+        final Configuration config = super.getConfiguration();
+        config.mapType("java.lang.Double", "double?");
+        config.mapType("java.lang.Integer", "int?");
+        config.mapType("java.lang.Long", "long?");
+        config.mapType("java.lang.Float", "float?");
+        config.mapType("java.lang.Boolean", "bool?");
+        config.mapType("java.util.Date", "System.DateTime?");
+        return config;
+    }
 
-	@Test
-	public void testChar() throws Throwable {
-		runResourceTestCase("autocasting/Char");
-	}
-	
-	@Test
-	public void testHex() throws Throwable {
-		runResourceTestCase("autocasting/Hex");
-	}
+    @Test
+    public void testChar() throws Throwable {
+        runResourceTestCase("autocasting/Char");
+    }
 
-	@Test
-	public void testDouble() throws Throwable {
-		runResourceTestCase("autocasting/Double");
-	}
+    @Test
+    public void testHex() throws Throwable {
+        runResourceTestCase("autocasting/Hex");
+    }
 
-	@Test
-	public void testInteger() throws Throwable {
-		runResourceTestCase("autocasting/Integer");
-	}
+    @Test
+    public void testDouble() throws Throwable {
+        runResourceTestCase("autocasting/Double");
+    }
 
-	@Test
-	public void testLong() throws Throwable {
-		runResourceTestCase("autocasting/Long");
-	}
+    @Test
+    public void testInteger() throws Throwable {
+        runResourceTestCase("autocasting/Integer");
+    }
 
-	@Test
-	public void testFloat() throws Throwable {
-		runResourceTestCase("autocasting/Float");
-	}
+    @Test
+    public void testLong() throws Throwable {
+        runResourceTestCase("autocasting/Long");
+    }
 
-	@Test
-	public void testBoolean() throws Throwable {
-		runResourceTestCase("autocasting/Boolean");
-	}
+    @Test
+    public void testFloat() throws Throwable {
+        runResourceTestCase("autocasting/Float");
+    }
+
+    @Test
+    public void testBoolean() throws Throwable {
+        runResourceTestCase("autocasting/Boolean");
+    }
 }

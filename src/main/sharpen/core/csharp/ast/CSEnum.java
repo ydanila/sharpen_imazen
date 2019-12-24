@@ -21,27 +21,29 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CSEnum extends CSType {
-	
-	private final ArrayList<CSEnumValue> _values = new ArrayList<CSEnumValue>();
 
-	public CSEnum(String name) {
-		super(name);
-	}
-	
-	public void addValue(String name) {
-		_values.add(new CSEnumValue(name));
-	}
+    private final ArrayList<CSEnumValue> _values = new ArrayList<CSEnumValue>();
 
-	@Override
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSEnum(String name) {
+        super(name);
+    }
 
-	public List<CSEnumValue> values() {
-		return Collections.unmodifiableList(_values);
-	}
+    public void addValue(String name) {
+        _values.add(new CSEnumValue(name));
+    }
+
+    @Override
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    public List<CSEnumValue> values() {
+        return Collections.unmodifiableList(_values);
+    }
 
 }

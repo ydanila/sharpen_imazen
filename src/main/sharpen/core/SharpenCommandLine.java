@@ -21,77 +21,80 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SharpenCommandLine {
 
     public static SharpenCommandLine parse(String[] args) {
-		return new SharpenCommandLineParser(args).commandLine();
-	}
-	
-	public static enum PascalCaseOptions {
-		None {
-			@Override
-			public NamingStrategy getNamingStrategy() {
-				return NamingStrategy.DEFAULT;
-			}
-		},
-		Identifiers{
-			@Override
-			public NamingStrategy getNamingStrategy() {
-				return PascalCaseIdentifiersNamingStrategy.DEFAULT;
-			}
-		},
-		NamespaceAndIdentifiers{
-			@Override
-			public NamingStrategy getNamingStrategy() {
-				return PascalCaseNamingStrategy.DEFAULT;
-			}
-		};
+        return new SharpenCommandLineParser(args).commandLine();
+    }
 
-		public abstract NamingStrategy getNamingStrategy();
-	}
+    public enum PascalCaseOptions {
+        None {
+            @Override
+            public NamingStrategy getNamingStrategy() {
+                return NamingStrategy.DEFAULT;
+            }
+        },
+        Identifiers {
+            @Override
+            public NamingStrategy getNamingStrategy() {
+                return PascalCaseIdentifiersNamingStrategy.DEFAULT;
+            }
+        },
+        NamespaceAndIdentifiers {
+            @Override
+            public NamingStrategy getNamingStrategy() {
+                return PascalCaseNamingStrategy.DEFAULT;
+            }
+        };
 
-	/**
-	 * Name of the runtime class. The runtime class provides implementation for
-	 * methods that don't have a direct mapping or that are simpler to map at the
-	 * language level than at the sharpen level. For instance: String.substring,
-	 * String.valueOf, Exception.printStackTrace, etc. For a complete list of all the
-	 * method that can be mapped to the runtime class see {@link Configuration#runtimeMethod}
-	 * call hierarchy. 
-	 */
-	public String runtimeTypeName = ConfigurationFactory.DEFAULT_RUNTIME_TYPE_NAME;
-	public boolean continueOnError;
-	public boolean nativeTypeSystem;
-	public PascalCaseOptions pascalCase = PascalCaseOptions.None;
-	public boolean indentWithSpaces;
-	public int indentSize = 4;
-	public int maxColumns = 80;
-	public String project;
-	public String projectPath;
-	final public List<String> classpath = new ArrayList<String>();
-	final public List<String> sourceFolders = new ArrayList<String>();
-	final public List<Configuration.NameMapping> namespaceMappings = new ArrayList<Configuration.NameMapping>();
-	final public List<Configuration.NameMapping> typeMappings = new ArrayList<Configuration.NameMapping>();
-	final public Map<String, Configuration.MemberMapping> memberMappings = new HashMap<String, Configuration.MemberMapping>();
+        public abstract NamingStrategy getNamingStrategy();
+    }
+
+    /**
+     * Name of the runtime class. The runtime class provides implementation for
+     * methods that don't have a direct mapping or that are simpler to map at the
+     * language level than at the sharpen level. For instance: String.substring,
+     * String.valueOf, Exception.printStackTrace, etc. For a complete list of all the
+     * method that can be mapped to the runtime class see {@link Configuration#runtimeMethod}
+     * call hierarchy.
+     */
+    public String runtimeTypeName = ConfigurationFactory.DEFAULT_RUNTIME_TYPE_NAME;
+    public boolean continueOnError;
+    public boolean nativeTypeSystem;
+    public PascalCaseOptions pascalCase = PascalCaseOptions.None;
+    public boolean indentWithSpaces;
+    public int indentSize = 4;
+    public int maxColumns = 80;
+    public String project;
+    public String projectPath;
+    final public List<String> classpath = new ArrayList<String>();
+    final public List<String> sourceFolders = new ArrayList<String>();
+    final public List<Configuration.NameMapping> namespaceMappings = new ArrayList<Configuration.NameMapping>();
+    final public List<Configuration.NameMapping> typeMappings = new ArrayList<Configuration.NameMapping>();
+    final public Map<String, Configuration.MemberMapping> memberMappings = new HashMap<String, Configuration.MemberMapping>();
     final public List<String> removeTypeMappings = new ArrayList<String>();
     final public List<String> removeMemberMappings = new ArrayList<String>();
-	public boolean nativeInterfaces;
-	public boolean separateInterfaceConstants;
-	public boolean organizeUsings;
+    public boolean nativeInterfaces;
+    public boolean separateInterfaceConstants;
+    public boolean organizeUsings;
     public boolean mapByteToSbyte;
     public boolean disableMapIteratorToEnumerator;
     public boolean numberValueGetter;
-	public boolean paramCountFileNames;
-	final public List<String> fullyQualifiedTypes = new ArrayList<String>();
-	final public List<String> partialTypes = new ArrayList<String>();
-	public String headerFile;
-	public String xmldoc;
-	public final List<Configuration.NameMapping> eventMappings = new ArrayList<Configuration.NameMapping>();
-	public final List<String> eventAddMappings = new ArrayList<String>();
-	public final Map<String, String> conditionalCompilation = new HashMap<String, String>();
-	public String configurationClass;
-	public boolean junitConversion;
-	public String sharpenNamespace;
-	public boolean help;
+    public boolean paramCountFileNames;
+    final public List<String> fullyQualifiedTypes = new ArrayList<String>();
+    final public List<String> partialTypes = new ArrayList<String>();
+    public String headerFile;
+    public String xmldoc;
+    public final List<Configuration.NameMapping> eventMappings = new ArrayList<Configuration.NameMapping>();
+    public final List<String> eventAddMappings = new ArrayList<String>();
+    public final Map<String, String> conditionalCompilation = new HashMap<String, String>();
+    public String configurationClass;
+    public boolean junitConversion;
+    public String sharpenNamespace;
+    public boolean help;
 }

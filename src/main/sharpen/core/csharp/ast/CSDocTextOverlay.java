@@ -26,12 +26,12 @@ package sharpen.core.csharp.ast;
 
 public class CSDocTextOverlay extends CSDocTextNode {
 
-	public CSDocTextOverlay(String text) {
-		super(text);
-	}
-	
-	public void accept(CSVisitor visitor) {
-		visitor.visit(this);
-	}
+    public CSDocTextOverlay(String text) {
+        super(text);
+    }
+
+    public void accept(CSVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

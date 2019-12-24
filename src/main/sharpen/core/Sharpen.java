@@ -22,39 +22,39 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package sharpen.core;
 
 /**
- * Centralize class to access configuration 
+ * Centralize class to access configuration
  */
 public class Sharpen {
-	
-	public static final String PLUGIN_ID = "sharpen.core";
-	
-	//public static final String PROBLEM_MARKER = PLUGIN_ID + ".problem";
-	
-	//The shared instance.
-	private static Sharpen plugin;
 
-	private Configuration _configuration;
-	
-	/**
-	 * The constructor.
-	 */
-	private Sharpen() {
-		plugin = this;
-	}
+    public static final String PLUGIN_ID = "sharpen.core";
 
-	/**
-	 * Returns the shared instance.
-	 */
-	public static Sharpen getDefault() {
-		if(plugin ==null)plugin =new Sharpen();
-		return plugin;
-	}
+    //public static final String PROBLEM_MARKER = PLUGIN_ID + ".problem";
 
-	public void configuration(Configuration configuration) {
-		_configuration = configuration;
-	}
-	
-	public Configuration configuration() {
-		return _configuration;
-	}
+    //The shared instance.
+    private static Sharpen plugin;
+
+    private Configuration _configuration;
+
+    /**
+     * The constructor.
+     */
+    private Sharpen() {
+        plugin = this;
+    }
+
+    /**
+     * Returns the shared instance.
+     */
+    public static Sharpen getDefault() {
+        if (plugin == null) plugin = new Sharpen();
+        return plugin;
+    }
+
+    public void configuration(Configuration configuration) {
+        _configuration = configuration;
+    }
+
+    public Configuration configuration() {
+        return _configuration;
+    }
 }

@@ -21,43 +21,43 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import sharpen.core.*;
 import org.junit.Test;
+import sharpen.core.Configuration;
 
 public class EventConversionTestCase extends AbstractConversionTestCase {
-	@Test
-	public void testEventMapping() throws Throwable {
-		
-		final Configuration config = getConfiguration();
-		config.mapEventAdd("events.Event4.addListener");
-		config.mapEvent("events.EventRegistry.foo", "events.FooEventArgs");
-		runBatchConverterTestCase(config,
-				new TestCaseResource("events/EventMapping"),
-				new TestCaseResource("events/EventMappingLib") {
-					@Override
-					public boolean isSupportingLibrary() {
-						return true;
-					}
-				});
-	}
+    @Test
+    public void testEventMapping() throws Throwable {
 
-	@Test
-	public void testInterfaceWithEvents() throws Throwable {
-		runResourceTestCase("events/EventInterface");
-	}
-	
-	@Test
-	public void testClassImplementingInterfaceWithEvents() throws Throwable {
-		runResourceTestCase("events/EventInClassInterface");
-	}
-	
-	@Test
-	public void testEventConsumers() throws Throwable {
-		runResourceTestCase("events/EventConsumer");
-	}
-	
-	@Override
-	protected Configuration getConfiguration() {
-		return newPascalCaseIdentifiersConfiguration();
-	}	
+        final Configuration config = getConfiguration();
+        config.mapEventAdd("events.Event4.addListener");
+        config.mapEvent("events.EventRegistry.foo", "events.FooEventArgs");
+        runBatchConverterTestCase(config,
+                new TestCaseResource("events/EventMapping"),
+                new TestCaseResource("events/EventMappingLib") {
+                    @Override
+                    public boolean isSupportingLibrary() {
+                        return true;
+                    }
+                });
+    }
+
+    @Test
+    public void testInterfaceWithEvents() throws Throwable {
+        runResourceTestCase("events/EventInterface");
+    }
+
+    @Test
+    public void testClassImplementingInterfaceWithEvents() throws Throwable {
+        runResourceTestCase("events/EventInClassInterface");
+    }
+
+    @Test
+    public void testEventConsumers() throws Throwable {
+        runResourceTestCase("events/EventConsumer");
+    }
+
+    @Override
+    protected Configuration getConfiguration() {
+        return newPascalCaseIdentifiersConfiguration();
+    }
 }

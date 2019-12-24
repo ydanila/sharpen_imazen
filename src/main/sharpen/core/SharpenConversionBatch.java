@@ -21,125 +21,127 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core;
 
-import java.io.*;
-
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import sharpen.core.csharp.ast.CSCompilationUnit;
-import sharpen.core.framework.*;
+import sharpen.core.framework.ASTResolver;
+import sharpen.core.framework.ConversionBatch;
 
-import org.eclipse.core.runtime.*;
-import org.eclipse.jdt.core.*;
-import org.eclipse.jdt.core.dom.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 
 /**
  * Converts a set of java source files to c#.
- * 
+ * <p>
  * The c# files are created relative to the targetFolder directory. If no
  * targetFolder is specified the files will be created side by side with the
  * corresponding java source files.
- *  
  */
-public class SharpenConversionBatch extends ConversionBatch { 
-	
-	private String _targetProjectPath;
+public class SharpenConversionBatch extends ConversionBatch {
 
-	private final Configuration _configuration;	
+    private String _targetProjectPath;
 
-	public SharpenConversionBatch() {
-		this(Sharpen.getDefault().configuration());
-	}
-	
-	public SharpenConversionBatch(Configuration configuration) {
-		if (null == configuration) {
-			throw new IllegalArgumentException("configuration");
-		}
-		_configuration = configuration;
-	}
-	
-	public void setTargetProject(String projectPath) {
-		File fprojectPath = new File(projectPath);
-		if (fprojectPath.isDirectory() && !fprojectPath.exists())
-		{
-			fprojectPath.mkdir();
-		}
-		_targetProjectPath = projectPath;
-	}
+    private final Configuration _configuration;
 
-	//@Override
-	protected void convertCompilationUnit(ASTResolver resolver, String source, CompilationUnit ast)
-			throws CoreException, IOException {
-		SharpenConversion converter = new SharpenConversion(_configuration);
-		final StringWriter writer = new StringWriter();
-		converter.setTargetWriter(writer);
-		converter.setSource(source);
-		converter.setASTResolver(resolver);
-		CSCompilationUnit result = converter.run(ast);
-		if (writer.getBuffer().length() > 0) {
-			saveConvertedFile(source, result, writer);
-		}
-	}
-	/**
-	 * @param cu
-	 * @throws JavaModelException
-	 * @throws CoreException
-	 * @throws IOException 
-	 */
-	private void saveConvertedFile(String cu, CSCompilationUnit csModule, StringWriter convertedContents) throws  IOException, CoreException {
-		String newName = csModule.elementName();
-		if (newName == null) {
-			newName = getNameWithoutExtension(cu) + ".cs";
-		}
-		String folder = targetFolderForCompilationUnit(cu, csModule.namespace());
-		ensureFolder(folder);
-		newName = folder + "/" + newName;
-		File fnewName = new File(newName);
-		fnewName.createNewFile();
+    public SharpenConversionBatch() {
+        this(Sharpen.getDefault().configuration());
+    }
+
+    public SharpenConversionBatch(Configuration configuration) {
+        if (null == configuration) {
+            throw new IllegalArgumentException("configuration");
+        }
+        _configuration = configuration;
+    }
+
+    public void setTargetProject(String projectPath) {
+        File fprojectPath = new File(projectPath);
+        if (fprojectPath.isDirectory() && !fprojectPath.exists()) {
+            fprojectPath.mkdir();
+        }
+        _targetProjectPath = projectPath;
+    }
+
+    //@Override
+    protected void convertCompilationUnit(ASTResolver resolver, String source, CompilationUnit ast)
+            throws CoreException, IOException {
+        SharpenConversion converter = new SharpenConversion(_configuration);
+        final StringWriter writer = new StringWriter();
+        converter.setTargetWriter(writer);
+        converter.setSource(source);
+        converter.setASTResolver(resolver);
+        CSCompilationUnit result = converter.run(ast);
+        if (writer.getBuffer().length() > 0) {
+            saveConvertedFile(source, result, writer);
+        }
+    }
+
+    /**
+     * @param cu
+     * @throws JavaModelException
+     * @throws CoreException
+     * @throws IOException
+     */
+    private void saveConvertedFile(String cu, CSCompilationUnit csModule, StringWriter convertedContents) throws IOException, CoreException {
+        String newName = csModule.elementName();
+        if (newName == null) {
+            newName = getNameWithoutExtension(cu) + ".cs";
+        }
+        String folder = targetFolderForCompilationUnit(cu, csModule.namespace());
+        ensureFolder(folder);
+        newName = folder + "/" + newName;
+        File fnewName = new File(newName);
+        fnewName.createNewFile();
         FileWriter fw = new FileWriter(fnewName);
         fw.write(convertedContents.getBuffer().toString());
         fw.close();
-	}
-
-	private void ensureFolder(String folder) {
-		File ffolder = new File(folder);
-		ffolder.mkdirs();
     }
 
-	String targetFolderForCompilationUnit(String cu, String generatedNamespace)
-			throws CoreException {
+    private void ensureFolder(String folder) {
+        File ffolder = new File(folder);
+        ffolder.mkdirs();
+    }
 
-		if (null == _targetProjectPath) {
-			throw new IllegalArgumentException("_targetProjectPath");
-		}
-		
-		// compute target folder based on packageName
-		String targetFolder = _targetProjectPath;
-		
-		String cuParent = new File(cu).getParent().replace("\\", "/");
-		String packageName = generatedNamespace == null
-			? cuParent.substring(cuParent.lastIndexOf("/"))
-			: cleanupNamespace(generatedNamespace);
-		if (packageName.length() > 0) {
-			return getTargetPackageFolder(targetFolder, packageName);
-		}
-		return targetFolder;
-	}
+    String targetFolderForCompilationUnit(String cu, String generatedNamespace)
+            throws CoreException {
 
-	public static String cleanupNamespace(String generatedNamespace) {
-		// remove any keyword markers from the namespace 
-		return generatedNamespace.replace("@", "");
-	}
+        if (null == _targetProjectPath) {
+            throw new IllegalArgumentException("_targetProjectPath");
+        }
 
-	private String getTargetPackageFolder(String targetFolder, String packageName) {
-		 targetFolder = targetFolder  +"/"  + packageName.replace('.', '/').toLowerCase();
-		 return targetFolder;
-	}
-	
-	private String getNameWithoutExtension(String name) {
-		File f = new File(name);
-		String filename = f.getName();
-		return filename.substring(0,filename.lastIndexOf("."));
-	}
+        // compute target folder based on packageName
+        String targetFolder = _targetProjectPath;
 
-	public Configuration getConfiguration() {
-		return _configuration;
-	}
+        String cuParent = new File(cu).getParent().replace("\\", "/");
+        String packageName = generatedNamespace == null
+                ? cuParent.substring(cuParent.lastIndexOf("/"))
+                : cleanupNamespace(generatedNamespace);
+        if (packageName.length() > 0) {
+            return getTargetPackageFolder(targetFolder, packageName);
+        }
+        return targetFolder;
+    }
+
+    public static String cleanupNamespace(String generatedNamespace) {
+        // remove any keyword markers from the namespace
+        return generatedNamespace.replace("@", "");
+    }
+
+    private String getTargetPackageFolder(String targetFolder, String packageName) {
+        targetFolder = targetFolder + "/" + packageName.replace('.', '/').toLowerCase();
+        return targetFolder;
+    }
+
+    private String getNameWithoutExtension(String name) {
+        File f = new File(name);
+        String filename = f.getName();
+        return filename.substring(0, filename.lastIndexOf("."));
+    }
+
+    public Configuration getConfiguration() {
+        return _configuration;
+    }
 }

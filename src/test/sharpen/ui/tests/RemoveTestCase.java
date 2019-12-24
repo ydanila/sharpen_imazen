@@ -23,54 +23,54 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.ui.tests;
 
-import sharpen.core.*;
-import org.junit.Test; 
+import org.junit.Test;
+import sharpen.core.Configuration;
 
 public class RemoveTestCase extends AbstractConversionTestCase {
-	
-	@Test
-	public void testRemoveClass() throws Throwable {
-		runResourceTestCase("remove/RemoveClass");
-	}
 
-	@Test
-	public void testRemoveAllClassesInArray() throws Throwable {
-		runResourceTestCase("remove/RemoveAllClassesInArray");
-	}
+    @Test
+    public void testRemoveClass() throws Throwable {
+        runResourceTestCase("remove/RemoveClass");
+    }
 
-	@Test
-	public void testRemoveMethod() throws Throwable {
-		runResourceTestCase("remove/RemoveMethod");
-	}
-	
-	@Test
-	public void testRemoveInExpression() throws Throwable {
-		runResourceTestCase("remove/RemoveMethodInExpression");
-	}
-	
-	@Test
-	public void testRemoveFirst() throws Throwable {
-		runResourceTestCase("remove/RemoveFirst");
-	}
-	
-	@Test
-	public void testRemoveFirstInConstructor() throws Throwable {
-		runResourceTestCase("remove/RemoveFirstInConstructor");
-	}
-	
-	@Test
-	public void testRemoveMethodByConfig() throws Throwable {
-		final Configuration config = getConfiguration();
-		config.removeMethod("remove.Foo.baz");
-		runResourceTestCase(config, "remove/RemoveMethodByConfig");
-	}
-	
-	@Override
-	protected Configuration getConfiguration() {
-	    final Configuration configuration = super.getConfiguration();
-	    configuration.enableNativeTypeSystem();
-		return configuration;
-	}
+    @Test
+    public void testRemoveAllClassesInArray() throws Throwable {
+        runResourceTestCase("remove/RemoveAllClassesInArray");
+    }
+
+    @Test
+    public void testRemoveMethod() throws Throwable {
+        runResourceTestCase("remove/RemoveMethod");
+    }
+
+    @Test
+    public void testRemoveInExpression() throws Throwable {
+        runResourceTestCase("remove/RemoveMethodInExpression");
+    }
+
+    @Test
+    public void testRemoveFirst() throws Throwable {
+        runResourceTestCase("remove/RemoveFirst");
+    }
+
+    @Test
+    public void testRemoveFirstInConstructor() throws Throwable {
+        runResourceTestCase("remove/RemoveFirstInConstructor");
+    }
+
+    @Test
+    public void testRemoveMethodByConfig() throws Throwable {
+        final Configuration config = getConfiguration();
+        config.removeMethod("remove.Foo.baz");
+        runResourceTestCase(config, "remove/RemoveMethodByConfig");
+    }
+
+    @Override
+    protected Configuration getConfiguration() {
+        final Configuration configuration = super.getConfiguration();
+        configuration.enableNativeTypeSystem();
+        return configuration;
+    }
 
 
 }

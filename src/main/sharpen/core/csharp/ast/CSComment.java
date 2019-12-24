@@ -26,17 +26,17 @@ package sharpen.core.csharp.ast;
 
 public class CSComment extends CSNode {
 
-	private final int _startPosition;
+    private final int _startPosition;
 
-	public CSComment(int startPosition) {
-		_startPosition = startPosition;
-	}
+    public CSComment(int startPosition) {
+        _startPosition = startPosition;
+    }
 
-	@Override
-	public void accept(CSVisitor visitor) {
-	}
+    @Override
+    public void accept(CSVisitor visitor) {
+    }
 
-	public int startPosition() {
-		return _startPosition;
-	}
+    public int startPosition() {
+        return _startPosition;
+    }
 }

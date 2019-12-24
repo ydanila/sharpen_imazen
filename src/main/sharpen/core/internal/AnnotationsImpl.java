@@ -2,74 +2,75 @@
 package sharpen.core.internal;
 
 import org.eclipse.jdt.core.dom.*;
+import sharpen.core.Annotations;
+import sharpen.core.Bindings;
+import sharpen.core.SharpenAnnotations;
+import sharpen.core.framework.BindingUtils;
+import sharpen.core.framework.JavadocUtility;
 
-import sharpen.core.*;
-import sharpen.core.framework.*;
-import static sharpen.core.framework.Environments.*;
+import static sharpen.core.framework.Environments.my;
 
 public class AnnotationsImpl implements Annotations {
 
-	private final CompilationUnit _ast = my(CompilationUnit.class);
-	private final Bindings _bindings = my(Bindings.class);
+    private final CompilationUnit _ast = my(CompilationUnit.class);
+    private final Bindings _bindings = my(Bindings.class);
 
-	public TagElement effectiveAnnotationFor(BodyDeclaration node, String annotation) {
-		TagElement eventTag = javadocTagFor(node, annotation);
-		if (null != eventTag)
-			return eventTag;
+    public TagElement effectiveAnnotationFor(BodyDeclaration node, String annotation) {
+        TagElement eventTag = javadocTagFor(node, annotation);
+        if (null != eventTag)
+            return eventTag;
 
-		if (node instanceof MethodDeclaration) {
-			MethodDeclaration originalMethod = findOriginalMethodDeclaration((MethodDeclaration)node);
-			if (null == originalMethod)
-				return null;
+        if (node instanceof MethodDeclaration) {
+            MethodDeclaration originalMethod = findOriginalMethodDeclaration((MethodDeclaration) node);
+            if (null == originalMethod)
+                return null;
 
-			return javadocTagFor(originalMethod, annotation);
-		}
-		else if (node instanceof AnnotationTypeMemberDeclaration) {
-			AnnotationTypeMemberDeclaration originalMember = findOriginalMemberDeclaration((AnnotationTypeMemberDeclaration)node);
-			if (null == originalMember) {
-				return null;
-			}
+            return javadocTagFor(originalMethod, annotation);
+        } else if (node instanceof AnnotationTypeMemberDeclaration) {
+            AnnotationTypeMemberDeclaration originalMember = findOriginalMemberDeclaration((AnnotationTypeMemberDeclaration) node);
+            if (null == originalMember) {
+                return null;
+            }
 
-			return javadocTagFor(originalMember, annotation);
-		}
-		else {
-			throw new UnsupportedOperationException();
-		}
-	}
-	
-	private TagElement javadocTagFor(BodyDeclaration method, String annotation) {
-		return JavadocUtility.getJavadocTag(method, annotation);
-	}
+            return javadocTagFor(originalMember, annotation);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
 
-	private MethodDeclaration findOriginalMethodDeclaration(MethodDeclaration node) {
-		return (MethodDeclaration)findOriginalMethodDeclaration(node.resolveBinding());
-	}
+    private TagElement javadocTagFor(BodyDeclaration method, String annotation) {
+        return JavadocUtility.getJavadocTag(method, annotation);
+    }
 
-	private BodyDeclaration findOriginalMethodDeclaration(IMethodBinding binding) {
-		IMethodBinding definition = BindingUtils.findMethodDefininition(binding, _ast.getAST());
-		if (null == definition)
-			return null;
-		
-		return _bindings.findDeclaringNode(definition);
-	}
+    private MethodDeclaration findOriginalMethodDeclaration(MethodDeclaration node) {
+        return (MethodDeclaration) findOriginalMethodDeclaration(node.resolveBinding());
+    }
 
-	private AnnotationTypeMemberDeclaration findOriginalMemberDeclaration(AnnotationTypeMemberDeclaration node) {
-		return (AnnotationTypeMemberDeclaration)findOriginalMethodDeclaration(node.resolveBinding());
-	}
+    private BodyDeclaration findOriginalMethodDeclaration(IMethodBinding binding) {
+        IMethodBinding definition = BindingUtils.findMethodDefininition(binding, _ast.getAST());
+        if (null == definition)
+            return null;
 
-	public String annotatedPropertyName(MethodDeclaration node) {
-		final TagElement propertyTag = effectiveAnnotationFor(node, SharpenAnnotations.SHARPEN_PROPERTY);
-		if (JavadocUtility.hasSingleTextFragment(propertyTag)) {
-			return JavadocUtility.singleTextFragmentFrom(propertyTag);
-		}
-		return null;
-	}
+        return _bindings.findDeclaringNode(definition);
+    }
 
-	public String annotatedRenaming(BodyDeclaration node) {
-		TagElement renameTag = JavadocUtility.getJavadocTag(node, SharpenAnnotations.SHARPEN_RENAME);
-		if (null == renameTag)
-			return null;
-		return JavadocUtility.singleTextFragmentFrom(renameTag);
-	}
-	
+    private AnnotationTypeMemberDeclaration findOriginalMemberDeclaration(AnnotationTypeMemberDeclaration node) {
+        return (AnnotationTypeMemberDeclaration) findOriginalMethodDeclaration(node.resolveBinding());
+    }
+
+    public String annotatedPropertyName(MethodDeclaration node) {
+        final TagElement propertyTag = effectiveAnnotationFor(node, SharpenAnnotations.SHARPEN_PROPERTY);
+        if (JavadocUtility.hasSingleTextFragment(propertyTag)) {
+            return JavadocUtility.singleTextFragmentFrom(propertyTag);
+        }
+        return null;
+    }
+
+    public String annotatedRenaming(BodyDeclaration node) {
+        TagElement renameTag = JavadocUtility.getJavadocTag(node, SharpenAnnotations.SHARPEN_RENAME);
+        if (null == renameTag)
+            return null;
+        return JavadocUtility.singleTextFragmentFrom(renameTag);
+    }
+
 }
