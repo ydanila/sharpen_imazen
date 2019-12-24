@@ -2590,13 +2590,13 @@ public class CSharpBuilder extends ASTVisitor {
 	public boolean visit(ArrayCreation node) {
 		ITypeBinding saved = pushExpectedType (node.getType().getElementType().resolveBinding());
 		final List dimensions = mergeDimensions(node.dimensions(), node.getType().dimensions());
-		if (node.dimensions().size() > 0 && dimensions.size() > 1) {
+		if (node.dimensions().size() > 0) {
 			if (null != node.getInitializer()) {
 				notImplemented(node);
 			}
 			pushExpression(unfoldMultiArrayCreation(node, dimensions));
 		} else {
-			pushExpression(mapSingleArrayCreation(node));
+			pushExpression(mapUnsizedArrayCreation(node, dimensions));
 		}
 		popExpectedType(saved);
 		return false;
@@ -2617,44 +2617,61 @@ public class CSharpBuilder extends ASTVisitor {
 	 * string[2], new string[2], new string[2] } }"
 	 */
 	private CSArrayCreationExpression unfoldMultiArrayCreation(ArrayCreation node, List dimensions) {
-		return unfoldMultiArray(node.getType(), dimensions, 0);
+		if(dimensions.size() == 0) {
+			notImplemented(node);
+		}
+		Type elementType = node.getType().getElementType();
+		return unfoldMultiArray(node, dimensions, elementType);
 	}
 
-	private CSArrayCreationExpression unfoldMultiArray(ArrayType type, List dimensions, int dimensionIndex) {
-		final CSArrayCreationExpression expression = new CSArrayCreationExpression(new CSArrayTypeReference(mappedTypeReference(type.getElementType()),
-				dimensions.size() - dimensionIndex - 1));
-		expression.initializer(new CSArrayInitializerExpression());
-		int length = resolveIntValue(dimensions.get(dimensionIndex));
-		if (dimensionIndex < lastIndex(dimensions) - 1) {
-			for (int i = 0; i < length; ++i) {
-				expression.initializer().addExpression(
-				        unfoldMultiArray(type, dimensions, dimensionIndex + 1));
+	private CSArrayCreationExpression unfoldMultiArray(ArrayCreation node, List dimensions, Type elementType) {
+		//  if we have first dimension - initialization must be unfolded. if not - we won't find any dimension in other size specifications
+		Object dimension = dimensions.get(0);
+		Expression innerLength = dimension instanceof Expression ? (Expression) dimension : null;
+		if(innerLength != null && node.getInitializer() != null) {
+			notImplemented(node);
+		}
+		CSArrayCreationExpression result = new CSArrayCreationExpression(new CSArrayTypeReference(mappedTypeReference(elementType),
+				dimensions.size() - 1), dimensions.size() == 1 ? mapExpression(innerLength) : null);
+		// go down only if it has next dimension initialized
+		Dimension nextDimension = dimensions.size() > 1 && dimensions.get(1) instanceof Dimension ? (Dimension)dimensions.get(1) : null;
+		if(nextDimension != null){
+			result.length(mapExpression(innerLength));
+			return result;
+		}
+		if(dimensions.size() > 2) {
+			result.initializer(new CSArrayInitializerExpression());
+			// not constant literals not supported
+			if(!(innerLength instanceof NumberLiteral) && !(dimension instanceof Dimension)) {
+				notImplemented(node);
 			}
-		} else {
-			Object dimension = dimensions.get(dimensionIndex + 1);
-			Expression innerLength = dimension instanceof Expression ? (Expression) dimension : null;
-			CSTypeReferenceExpression innerType = mappedTypeReference(type.getElementType());
-			for (int i = 0; i < length; ++i) {
-				expression.initializer().addExpression(
-				        new CSArrayCreationExpression(innerType, mapExpression(innerLength)));
+			int length = resolveIntValue(innerLength);
+			for(int i = 0; i < length; i++) {
+				result.initializer().addExpression(unfoldMultiArray(node, dimensions.subList(1, dimensions.size()), elementType));
+			}
+		} else if(dimensions.size() == 2) {
+			result.initializer(new CSArrayInitializerExpression());
+			int length = resolveIntValue(innerLength);
+			for(int i = 0; i < length; i++) {
+				result.initializer().addExpression(mapUnsizedArrayCreation(node, dimensions.subList(1, dimensions.size())));
 			}
 		}
-		return expression;
-	}
-
-	private int lastIndex(List<?> dimensions) {
-		return dimensions.size() - 1;
+		return result;
 	}
 
 	private int resolveIntValue(Object expression) {
 		return ((Number) ((Expression) expression).resolveConstantExpressionValue()).intValue();
 	}
 
-	private CSArrayCreationExpression mapSingleArrayCreation(ArrayCreation node) {
-		CSArrayCreationExpression expression = new CSArrayCreationExpression(mappedTypeReference(componentType(node
-		        .getType())));
-		if (!node.dimensions().isEmpty()) {
-			expression.length(mapExpression((Expression) node.dimensions().get(0)));
+	private CSArrayCreationExpression mapUnsizedArrayCreation(ArrayCreation node, List dimensions) {
+		CSArrayCreationExpression expression = new CSArrayCreationExpression(new CSArrayTypeReference(mappedTypeReference(node.getType().getElementType()),
+				dimensions.size() - 1));
+
+		 if (!dimensions.isEmpty()) {
+			 Object dimension = dimensions.get(0);
+			 if(dimension instanceof Expression) {
+				 expression.length(mapExpression((Expression) dimension));
+			 }
 		}
 		expression.initializer(mapArrayInitializer(node));
 		return expression;
