@@ -1,0 +1,26 @@
+public class SwitchCase3
+{
+	public static int foo(string s)
+	{
+		switch (s)
+		{
+			case "quux":
+			case "foo":
+			case "bar":
+			{
+				break;
+			}
+
+			case "baz":
+			{
+				return 2;
+			}
+
+			default:
+			{
+				return 42;
+			}
+		}
+		return 0;
+	}
+}

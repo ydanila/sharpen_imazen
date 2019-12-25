@@ -249,6 +249,11 @@ public class UnclassifiedConversionTestCase extends AbstractConversionTestCase {
     }
 
     @Test
+    public void testStringInSwitchCase() throws Throwable {
+        runResourceTestCase("SwitchCase3");
+    }
+
+    @Test
     public void testSwitchCaseDefaultThrows() throws Throwable {
         runResourceTestCase("SwitchCaseDefaultThrows");
     }
