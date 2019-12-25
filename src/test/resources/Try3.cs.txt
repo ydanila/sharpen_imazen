@@ -1,0 +1,36 @@
+public class Try3
+{
+	public virtual string run()
+	{
+		try
+		{
+			using (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader
+				("path")))
+			{
+				return br.readLine();
+			}
+		}
+		catch (System.IO.IOException)
+		{
+			return string.Empty;
+		}
+	}
+
+	public virtual bool run2()
+	{
+		try
+		{
+			using (java.io.FileInputStream @in = new java.io.FileInputStream("src"))
+			{
+				using (java.io.FileOutputStream @out = new java.io.FileOutputStream("dest"))
+				{
+					return true;
+				}
+			}
+		}
+		catch (System.IO.IOException)
+		{
+			return false;
+		}
+	}
+}

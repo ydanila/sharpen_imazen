@@ -1,0 +1,28 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class Try3 {
+	
+	public String run() {
+		
+		try (BufferedReader br = new BufferedReader(new FileReader("path"))) {
+            return br.readLine();
+        } catch (IOException x) {
+            return "";
+        }
+	}
+
+	public Boolean run2() {
+            try (
+               FileInputStream in = new FileInputStream("src");
+               FileOutputStream out = new FileOutputStream("dest"))
+            {
+                return true;
+            } catch (IOException x) {
+                 return false;
+             }
+    	}
+}

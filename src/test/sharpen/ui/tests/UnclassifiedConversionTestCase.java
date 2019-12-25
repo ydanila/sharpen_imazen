@@ -429,6 +429,11 @@ public class UnclassifiedConversionTestCase extends AbstractConversionTestCase {
     }
 
     @Test
+    public void testTryWithResources() throws Throwable {
+        runResourceTestCase("Try3");
+    }
+
+    @Test
     public void testThrow() throws Throwable {
         runResourceTestCase("Throw1");
     }
