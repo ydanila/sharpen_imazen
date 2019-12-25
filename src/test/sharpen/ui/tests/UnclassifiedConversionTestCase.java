@@ -512,5 +512,10 @@ public class UnclassifiedConversionTestCase extends AbstractConversionTestCase {
     public void testFieldMapping() throws Throwable {
         runResourceTestCase("FieldMapping");
     }
+
+    @Test
+    public void testNumericLiterals() throws Throwable {
+        runResourceTestCase("NumericLiterals");
+    }
 }
 
