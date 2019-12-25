@@ -5,4 +5,6 @@ class Entry<K, V> {
 
 public class GenericObjectConstruction {
 	private Entry<String, Integer> _default = new Entry<String, Integer>();
+
+	private Entry<String, Integer> _default2 = new Entry<>();
 }

@@ -7,5 +7,7 @@ namespace generics
 	public class GenericObjectConstruction
 	{
 		private generics.Entry<string, int> _default = new generics.Entry<string, int>();
+
+		private generics.Entry<string, int> _default2 = new generics.Entry<string, int>();
 	}
 }
