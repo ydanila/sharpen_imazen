@@ -2384,6 +2384,7 @@ public class CSharpBuilder extends ASTVisitor {
                 clause = new CSCatchClause();
             } else {
                 clause = new CSCatchClause(createVariableDeclaration(_currentExceptionVariable, null));
+                // multiple exceptions catching supported via when clause
                 if (node.getException().getType() instanceof UnionType) {
                     clause.when(new CSWhenClause(mapExceptionsToExpression(((UnionType) node.getException().getType()).types())));
                 }

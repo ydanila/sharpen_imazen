@@ -16,11 +16,12 @@ It’s likely that you will need to create a configuration class to customize an
 
 Sharpen was originally created by db40 [svn source here](https://source.db4o.com/db4o/trunk) in the format of an Eclipse plugin, but it has since been refactored to work from the command line and on build servers.
 
+For this moment supported all features up to Java 7 but with [some limitations](IMPLEMENTATION_LIMITATIONS.md).
 
 ### Building and testing sharpen itself
 
 1. Clone this repository
-2. Install Java 7 and maven. Java 6 and 8 aren’t supported.
+2. Install Java 8 and maven.
 3. Run ‘mvn clean test’ to test
 4. Run ‘mvn install ’ to generate .jar files in /src/target
 
