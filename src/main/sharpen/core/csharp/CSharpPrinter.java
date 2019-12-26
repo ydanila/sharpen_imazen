@@ -624,8 +624,19 @@ public class CSharpPrinter extends CSVisitor {
             ex.accept(this);
             write(")");
         }
+        CSWhenClause when = node.when();
+        if(when != null) {
+            visit(when);
+        }
         writeLine();
         node.body().accept(this);
+    }
+
+    public void visit(CSWhenClause node) {
+        CSExpression expr = node.expression();
+        write(" when (");
+        expr.accept(this);
+        write(")");
     }
 
     public void visit(CSThrowStatement node) {

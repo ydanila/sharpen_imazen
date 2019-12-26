@@ -88,6 +88,11 @@ public class UnclassifiedConversionTestCase extends AbstractConversionTestCase {
     }
 
     @Test
+    public void testMultiCatch() throws Throwable {
+        runResourceTestCase("Catch2");
+    }
+
+    @Test
     public void testExternalMethodMapping() throws Throwable {
         String jar = JarUtilities.createJar(BindingTestCaseSubject.class, BindingTestCaseSubject.Foo.class, BindingTestCaseSubject.Baz.class);
         List<String> classJar = new ArrayList<String>();

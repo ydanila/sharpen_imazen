@@ -1,0 +1,19 @@
+public class Catch2
+{
+	public static object multiCatch()
+	{
+		try
+		{
+			throw new System.Exception("bar");
+		}
+		catch (System.IO.IOException e) when (e is java.io.EOFException | e is java.io.FileNotFoundException
+			)
+		{
+			return null;
+		}
+		catch (System.Exception)
+		{
+			return null;
+		}
+	}
+}

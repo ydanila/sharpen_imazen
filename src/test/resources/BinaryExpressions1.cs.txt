@@ -4,7 +4,8 @@ public class BinaryExpressions1
 	{
 		int a = prompt() * 2;
 		int b = a + 5 * (2 - prompt());
-		println("a: " + a + ", " + b);
+		int c = 3 | 6;
+		println("a: " + a + ", " + b + c);
 		bool flag = a > b;
 		if (!flag)
 		{

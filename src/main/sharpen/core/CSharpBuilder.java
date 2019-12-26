@@ -31,7 +31,6 @@ import sharpen.core.csharp.ast.*;
 import sharpen.core.framework.*;
 
 import java.util.*;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -2385,14 +2384,27 @@ public class CSharpBuilder extends ASTVisitor {
                 clause = new CSCatchClause();
             } else {
                 clause = new CSCatchClause(createVariableDeclaration(_currentExceptionVariable, null));
+                if (node.getException().getType() instanceof UnionType) {
+                    clause.when(new CSWhenClause(mapExceptionsToExpression(((UnionType) node.getException().getType()).types())));
+                }
             }
-            clause.anonymous(!check.used());
+            clause.anonymous(clause.when() == null && !check.used());
             visitBlock(clause.body(), node.getBody());
             return clause;
         } finally {
             _currentExceptionVariable = oldExceptionVariable;
             popScope();
         }
+    }
+
+    private CSExpression mapExceptionsToExpression(List<SimpleType> types) {
+        SimpleType type = types.get(0);
+        CSInfixExpression result = new CSInfixExpression("is", new CSReferenceExpression(mapVariableName(_currentExceptionVariable.getName())), mappedTypeReference(type));
+        if (types.size() == 1) {
+            return result;
+        }
+
+        return new CSInfixExpression("|", result, mapExceptionsToExpression(types.subList(1, types.size())));
     }
 
     private boolean isEmptyCatch(CatchClause clause, CheckVariableUseVisitor check) {

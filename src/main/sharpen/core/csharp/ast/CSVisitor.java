@@ -141,6 +141,9 @@ public class CSVisitor {
     public void visit(CSCatchClause node) {
     }
 
+    public void visit(CSWhenClause node) {
+    }
+
     public void visit(CSBaseExpression node) {
     }
 

@@ -1,0 +1,12 @@
+public class Catch2 {
+	public static Object multiCatch() {
+    		try {
+    			throw new Exception("bar");
+    		} catch (java.io.EOFException | java.io.FileNotFoundException e) {
+    			return null;
+    		}
+    		catch (Exception e) {
+                return null;
+            }
+    	}
+}

@@ -21,42 +21,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 package sharpen.core.csharp.ast;
 
-public class CSCatchClause extends CSNode {
+public class CSWhenClause extends CSNode {
+    private final CSExpression _expression;
 
-    private CSVariableDeclaration _exception;
-    private CSBlock _body = new CSBlock();
-    private CSWhenClause _when;
-
-    public CSCatchClause() {
-    }
-
-    public CSCatchClause(CSVariableDeclaration exception) {
-        _exception = exception;
+    public CSWhenClause(CSExpression expression) {
+        _expression = expression;
     }
 
     public void accept(CSVisitor visitor) {
         visitor.visit(this);
     }
 
-    public CSBlock body() {
-        return _body;
-    }
 
-    public CSVariableDeclaration exception() {
-        return _exception;
-    }
-
-    public void anonymous(boolean an) {
-        if (an && null != _exception) {
-            _exception.name(null);
-        }
-    }
-
-    public void when(CSWhenClause when) {
-        _when = when;
-    }
-
-    public CSWhenClause when() {
-        return _when;
+    public CSExpression expression() {
+        return _expression;
     }
 }
